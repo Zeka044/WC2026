@@ -340,6 +340,188 @@
 
   ::-webkit-scrollbar{height:8px;width:8px;}
   ::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px;}
+
+  /* ---- Lock overlay on score boxes ---- */
+  .score-box:disabled{
+    opacity:0.6;
+    cursor:not-allowed;
+    border-color:var(--line);
+    color:var(--muted);
+  }
+  .lock-badge{
+    display:inline-flex;align-items:center;gap:5px;
+    font-size:11.5px;color:var(--gold);
+    font-family:'Oswald',sans-serif;letter-spacing:0.5px;
+  }
+
+  /* ---- Global locked banner ---- */
+  .global-lock-banner{
+    background: linear-gradient(135deg, rgba(192,82,63,0.15), rgba(192,82,63,0.05));
+    border: 1.5px solid var(--danger);
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-family:'Oswald',sans-serif;
+    font-size:13px;
+    color: var(--danger);
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  /* ---- Double section & button ---- */
+  .double-section{
+    background: linear-gradient(135deg, rgba(217,165,60,0.09) 0%, rgba(6,18,13,0.4) 100%);
+    border: 1.5px solid var(--gold-soft);
+    border-radius: 10px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+    margin-top: 2px;
+  }
+  .double-section::after{
+    content:"⚡";
+    position:absolute;
+    left:8px; top:50%;
+    transform:translateY(-50%);
+    font-size:52px;
+    opacity:0.05;
+    pointer-events:none;
+    line-height:1;
+  }
+  .double-section-label{
+    font-family:'Oswald',sans-serif;
+    font-size:12px;
+    color:var(--gold);
+    letter-spacing:1px;
+    text-transform:uppercase;
+    flex:1;
+    line-height:1.4;
+    position:relative;z-index:1;
+  }
+  .double-section-label small{
+    display:block;
+    font-size:10.5px;
+    color:var(--muted);
+    letter-spacing:0;
+    text-transform:none;
+    margin-top:2px;
+    font-family:'Tajawal',sans-serif;
+  }
+  .btn.double-btn{
+    background: linear-gradient(135deg, rgba(217,165,60,0.18), rgba(217,165,60,0.06));
+    border: 1.5px solid var(--gold-soft);
+    color: var(--gold);
+    font-family:'Oswald',sans-serif;
+    font-size:12.5px;
+    letter-spacing:0.8px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all .2s;
+    white-space:nowrap;
+    position:relative;z-index:1;
+  }
+  .btn.double-btn:hover{
+    background: var(--gold);
+    color: var(--bg-deep);
+    border-color: var(--gold);
+    box-shadow: 0 0 16px rgba(217,165,60,0.4);
+  }
+  .btn.double-btn.active-double{
+    background: var(--gold);
+    color: var(--bg-deep);
+    border-color: var(--gold);
+    box-shadow: 0 0 18px rgba(217,165,60,0.5);
+    font-weight:700;
+  }
+  .btn.double-btn.used{
+    cursor: default;
+    opacity: 0.5;
+  }
+  .btn.double-btn.used:hover{
+    background: linear-gradient(135deg, rgba(217,165,60,0.18), rgba(217,165,60,0.06));
+    color: var(--gold);
+    border-color: var(--gold-soft);
+    box-shadow: none;
+  }
+  /* كارت فيه double مقفول — هايلايت واضح */
+  .match-card.double-locked{
+    border-color: rgba(217,165,60,0.6);
+    background: linear-gradient(160deg, rgba(217,165,60,0.11) 0%, var(--surface) 50%);
+    box-shadow: 0 0 0 1.5px rgba(217,165,60,0.2), 0 4px 24px rgba(217,165,60,0.08);
+    position: relative;
+  }
+  .match-card.double-locked::before{
+    content: "⚡";
+    position: absolute;
+    top: 10px;
+    left: 14px;
+    font-size: 13px;
+    opacity: 0.55;
+    pointer-events: none;
+  }
+  .double-locked-badge{
+    display:inline-flex;align-items:center;gap:6px;
+    background: linear-gradient(135deg, rgba(217,165,60,0.2), rgba(140,114,50,0.1));
+    border: 1.5px solid var(--gold);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-family:'Oswald',sans-serif;
+    font-size:12px;
+    color: var(--gold);
+    letter-spacing:0.5px;
+  }
+
+  /* ---- Confirmation Modal ---- */
+  .modal-backdrop{
+    position:fixed;inset:0;
+    background:rgba(6,18,13,0.82);
+    backdrop-filter:blur(4px);
+    z-index:1000;
+    display:flex;align-items:center;justify-content:center;
+    padding:20px;
+    opacity:0;pointer-events:none;
+    transition:opacity .2s;
+  }
+  .modal-backdrop.open{opacity:1;pointer-events:all;}
+  .modal{
+    background:var(--surface);
+    border:1px solid var(--gold-soft);
+    border-radius:16px;
+    padding:28px 24px;
+    max-width:380px;width:100%;
+    text-align:center;
+    transform:translateY(8px);
+    transition:transform .2s;
+    box-shadow:0 20px 60px rgba(0,0,0,0.5);
+  }
+  .modal-backdrop.open .modal{transform:translateY(0);}
+  .modal-icon{font-size:32px;margin-bottom:10px;}
+  .modal-title{
+    font-family:'Oswald',sans-serif;
+    font-size:18px;color:var(--cream);
+    margin:0 0 6px;letter-spacing:0.5px;
+  }
+  .modal-body{
+    color:var(--muted);font-size:14px;
+    line-height:1.6;margin-bottom:20px;
+  }
+  .modal-body .highlight{
+    color:var(--gold);font-weight:700;
+    font-family:'Oswald',sans-serif;font-size:20px;
+    display:block;margin:10px 0;
+  }
+  .modal-body .double-note{
+    color:var(--mint);font-size:12.5px;
+    border:1px solid var(--mint-dim);
+    border-radius:8px;padding:6px 10px;
+    margin-top:8px;display:block;
+  }
+  .modal-actions{display:flex;gap:10px;justify-content:center;}
+  .modal-actions .btn{flex:1;padding:12px;}
 </style>
 </head>
 <body>
@@ -378,6 +560,19 @@
 <nav class="tabs" id="tabsNav"></nav>
 
 <main id="mainArea"></main>
+
+<!-- Confirmation Modal -->
+<div class="modal-backdrop" id="confirmModal">
+  <div class="modal">
+    <div class="modal-icon">🔒</div>
+    <h3 class="modal-title">تأكيد التوقع</h3>
+    <div class="modal-body" id="confirmModalBody"></div>
+    <div class="modal-actions">
+      <button class="btn ghost" id="confirmCancel">إلغاء</button>
+      <button class="btn" id="confirmOk">تأكيد وقفل</button>
+    </div>
+  </div>
+</div>
 
 
 <script>
@@ -476,6 +671,12 @@ let allPredictions = [];
 let allUsers = {};
 let activeTab = "دور الـ32";
 let authMode = "login";
+// doubleUsed: { roundName -> matchId لو اتستخدم فيه، أو null }
+let doubleUsed = {};
+// التوقع اللي في انتظار التأكيد
+let pendingConfirm = null;
+// هل الأدمن قفل كل التوقعات؟
+let globalLocked = false;
 
 const tabsNav = document.getElementById("tabsNav");
 const mainArea = document.getElementById("mainArea");
@@ -602,6 +803,9 @@ adminBtn.onclick = ()=>{
 function onLoggedIn(username, displayName){
   userId = username;
   userName = displayName || username;
+  // حفظ الجلسة في localStorage
+  localStorage.setItem("wc2026_uid", username);
+  localStorage.setItem("wc2026_name", displayName || username);
   authBox.style.display = "none";
   userBox.style.display = "flex";
   welcomeUser.innerHTML = `أهلاً، <b>${userName}</b>`;
@@ -615,6 +819,9 @@ function onLoggedOut(){
   userName = "";
   isAdmin = false;
   myPredictions = {};
+  // مسح الجلسة من localStorage
+  localStorage.removeItem("wc2026_uid");
+  localStorage.removeItem("wc2026_name");
   authBox.style.display = "block";
   userBox.style.display = "none";
   renderMain();
@@ -665,8 +872,27 @@ function renderMatchesForRound(round){
   if(isAdmin){
     const bar = document.createElement("div");
     bar.className = "admin-bar";
-    bar.innerHTML = `🔐 وضع الأدمن مفعّل — تقدر تعدل أسماء الفرق وتدخل النتيجة الحقيقية. <button class="btn ghost small" id="exitAdminBtn">خروج من وضع الأدمن</button>`;
+    bar.innerHTML = `
+      <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;width:100%;">
+        <span style="font-family:'Oswald',sans-serif;color:var(--gold);font-size:13px;letter-spacing:.5px;flex:1;">🔐 وضع الأدمن</span>
+        <button class="btn ghost small" id="exitAdminBtn">خروج</button>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;width:100%;margin-top:8px;padding-top:8px;border-top:1px solid var(--line);">
+        <button class="btn small ${globalLocked?'':'gold'}" id="toggleLockAllBtn">
+          ${globalLocked ? '🔓 فتح التوقعات للكل' : '🔒 قفل التوقعات للكل'}
+        </button>
+        <button class="btn ghost small" id="adminManageDoubleBtn">⚡ إدارة Double</button>
+      </div>
+    `;
     wrap.appendChild(bar);
+  }
+
+  // بانر القفل العام (للكل مش بس الأدمن)
+  if(globalLocked && !isAdmin){
+    const banner = document.createElement("div");
+    banner.className = "global-lock-banner";
+    banner.innerHTML = "🔒 التوقعات متقفلة دلوقتي — مش ممكن تعمل أو تعدل توقع";
+    wrap.appendChild(banner);
   }
 
   list.forEach(m=>{
@@ -678,6 +904,16 @@ function renderMatchesForRound(round){
 
   if(isAdmin){
     document.getElementById("exitAdminBtn").onclick = ()=>{ isAdmin=false; renderMain(); };
+
+    document.getElementById("toggleLockAllBtn").onclick = ()=>{
+      globalLocked = !globalLocked;
+      if(db){
+        db.collection("settings").doc("global").set({predictionsLocked: globalLocked}, {merge:true});
+      }
+      renderMain();
+    };
+
+    document.getElementById("adminManageDoubleBtn").onclick = ()=> openManageDoublePanel();
   }
 }
 
@@ -685,20 +921,60 @@ function buildMatchCard(m){
   const card = document.createElement("div");
   card.className = "match-card";
 
-  const pred = myPredictions[m.id] || {scoreA:"", scoreB:""};
+  const pred = myPredictions[m.id] || {scoreA:"", scoreB:"", locked:false, isDouble:false};
+  const isLocked = !!pred.locked;
+  const isDouble = !!pred.isDouble;
   const hasResult = m.resultA!==undefined && m.resultA!==null && m.resultB!==undefined && m.resultB!==null;
-  const pts = hasResult ? calcPoints(
+
+  // نقاط مع مضاعفة لو double
+  let pts = hasResult ? calcPoints(
     pred.scoreA===""? null: Number(pred.scoreA),
     pred.scoreB===""? null: Number(pred.scoreB),
     m.resultA, m.resultB
   ) : null;
+  const displayPts = (pts !== null && isDouble) ? pts * 2 : pts;
 
   const metaRight = hasResult
-    ? (pts===null ? `<span class="pts">لسه ماتوقعتش</span>`
-       : pts===3 ? `<span class="pts p3">+3 🎯 نتيجة مضبوطة</span>`
-       : pts===1 ? `<span class="pts p1">+1 ✅ فائز صحيح</span>`
+    ? (displayPts===null ? `<span class="pts">لسه ماتوقعتش</span>`
+       : displayPts===6 ? `<span class="pts p3">+6 ⚡🎯 Double مضبوط!</span>`
+       : displayPts===3 ? (isDouble ? `<span class="pts p3">+3 ⚡✅ Double فائز</span>` : `<span class="pts p3">+3 🎯 نتيجة مضبوطة</span>`)
+       : displayPts===2 ? `<span class="pts p1">+2 ⚡✅ Double فائز</span>`
+       : displayPts===1 ? `<span class="pts p1">+1 ✅ فائز صحيح</span>`
        : `<span class="pts p0">0 ❌</span>`)
     : `<span>مفتوحة للتوقع</span>`;
+
+  // double button للراوند ده
+  const round = m.round;
+  const doubleUsedInRound = doubleUsed[round];
+  const doubleLockedHere = doubleUsedInRound === m.id + "__locked";
+  const doubleLockedElsewhere = doubleUsedInRound && !doubleLockedHere;
+  const effectiveLocked = isLocked || globalLocked;
+
+  // بناء سكشن الـ Double
+  let doubleSectionHtml = "";
+  if(!hasResult){
+    if(isDouble || doubleLockedHere){
+      // مقفول بـ double على المباراة دي
+      doubleSectionHtml = `
+        <div class="double-section">
+          <div class="double-section-label">⚡ DOUBLE<small>النقاط مضاعفة على المباراة دي</small></div>
+          <span class="double-locked-badge">🔒 مقفول</span>
+        </div>`;
+    } else if(!effectiveLocked){
+      // مفتوح — ممكن يختار double
+      doubleSectionHtml = `
+        <div class="double-section">
+          <div class="double-section-label">⚡ DOUBLE<small>${doubleLockedElsewhere ? 'اتستخدم في مباراة تانية في الراوند ده' : 'ضاعف نقاطك لو توقعك صح'}</small></div>
+          <button class="btn double-btn ${doubleLockedElsewhere?'used':''}" ${doubleLockedElsewhere?'disabled':''} data-double="${m.id}">
+            ${doubleLockedElsewhere ? '⚡ مستخدم' : '⚡ اختار'}
+          </button>
+        </div>`;
+    }
+  }
+
+  if(isDouble || doubleLockedHere) card.classList.add("double-locked");
+
+  const lockBadge = isLocked ? `<span class="lock-badge">🔒 مقفول</span>` : "";
 
   card.innerHTML = `
     <div class="match-meta">
@@ -708,16 +984,17 @@ function buildMatchCard(m){
     <div class="teams-row">
       <div class="team">
         <span class="team-name" ${isAdmin?'contenteditable="true"':''} data-side="A" data-id="${m.id}">${m.teamA}</span>
-        <input type="number" min="0" max="30" class="score-box" data-id="${m.id}" data-side="A" value="${pred.scoreA}" placeholder="-" />
+        <input type="number" min="0" max="30" class="score-box" data-id="${m.id}" data-side="A" value="${pred.scoreA}" placeholder="-" ${effectiveLocked?'disabled':''} />
       </div>
       <div class="vs-block">
         <span class="vs-label scoreboard-font">VS</span>
       </div>
       <div class="team">
         <span class="team-name" ${isAdmin?'contenteditable="true"':''} data-side="B" data-id="${m.id}">${m.teamB}</span>
-        <input type="number" min="0" max="30" class="score-box" data-id="${m.id}" data-side="B" value="${pred.scoreB}" placeholder="-" />
+        <input type="number" min="0" max="30" class="score-box" data-id="${m.id}" data-side="B" value="${pred.scoreB}" placeholder="-" ${effectiveLocked?'disabled':''} />
       </div>
     </div>
+    ${doubleSectionHtml}
     ${isAdmin ? `
       <div class="actual-row">
         <span class="lbl scoreboard-font">النتيجة الحقيقية</span>
@@ -733,7 +1010,7 @@ function buildMatchCard(m){
       </div>
     ` : ``}
     <div class="card-footer">
-      <button class="btn small" data-save-pred="${m.id}">حفظ توقعي</button>
+      ${!effectiveLocked && !hasResult ? `<button class="btn small" data-save-pred="${m.id}">حفظ وقفل توقعي 🔒</button>` : lockBadge}
       <span class="saved-tag" id="saved_${m.id}"></span>
     </div>
   `;
@@ -742,6 +1019,13 @@ function buildMatchCard(m){
   card.querySelectorAll('[data-save-pred]').forEach(btn=>{
     btn.onclick = ()=> savePrediction(m.id);
   });
+
+  // زرار Double — بيفتح confirm modal
+  const dblBtn = card.querySelector('[data-double]');
+  if(dblBtn){
+    dblBtn.onclick = ()=> confirmDouble(m.id, round, m);
+  }
+
   if(isAdmin){
     card.querySelectorAll('[data-save-result]').forEach(btn=>{
       btn.onclick = ()=> saveResult(m.id);
@@ -754,8 +1038,58 @@ function buildMatchCard(m){
   return card;
 }
 
+/* ---- Modal helpers ---- */
+const confirmModal = document.getElementById("confirmModal");
+const confirmModalBody = document.getElementById("confirmModalBody");
+const confirmCancel = document.getElementById("confirmCancel");
+const confirmOk = document.getElementById("confirmOk");
+
+confirmCancel.onclick = ()=>{
+  confirmModal.classList.remove("open");
+  pendingConfirm = null;
+  confirmOk.textContent = "تأكيد وقفل";
+  confirmOk.style.display = "";
+  confirmCancel.textContent = "إلغاء";
+  delete confirmModal.dataset.mode;
+};
+confirmOk.onclick = ()=>{
+  const mode = confirmModal.dataset.mode;
+  confirmModal.classList.remove("open");
+  confirmOk.textContent = "تأكيد وقفل";
+  confirmOk.style.display = "";
+  confirmCancel.textContent = "إلغاء";
+  if(mode === "double"){
+    const matchId = confirmModal.dataset.matchId;
+    const round = confirmModal.dataset.round;
+    // يتقفل نهائي — مش pending تاني
+    doubleUsed[round] = matchId + "__locked";
+    delete confirmModal.dataset.mode;
+    renderMain();
+  } else {
+    if(pendingConfirm) doSavePrediction(pendingConfirm);
+    pendingConfirm = null;
+    delete confirmModal.dataset.mode;
+  }
+};
+
 function savePrediction(matchId){
   if(!ensureUser()) return;
+  const m = matches[matchId];
+  if(!m) return;
+
+  // لو الأدمن قفل كل التوقعات
+  if(globalLocked){
+    alert("التوقعات متقفلة دلوقتي من الأدمن. 🔒");
+    return;
+  }
+
+  // لو التوقع مقفول منعه
+  const pred = myPredictions[matchId];
+  if(pred && pred.locked){
+    alert("التوقع ده مقفول ومش ممكن تغيره. 🔒");
+    return;
+  }
+
   const scoreAEl = document.querySelector(`.score-box[data-id="${matchId}"][data-side="A"]`);
   const scoreBEl = document.querySelector(`.score-box[data-id="${matchId}"][data-side="B"]`);
   const scoreA = scoreAEl.value;
@@ -764,19 +1098,54 @@ function savePrediction(matchId){
     alert("اكتب نتيجة للفريقين الاتنين قبل الحفظ.");
     return;
   }
+
+  // هل ده double؟
+  const round = m.round;
+  const isDoubleOnThis = doubleUsed[round] === matchId + "__locked";
+  
+  // اعرض modal التأكيد
+  const dblNote = isDoubleOnThis
+    ? `<span class="double-note">⚡ Double مفعّل — النقاط هتتضاعف لو صح!</span>` : "";
+  document.querySelector(".modal-icon").textContent = "🔒";
+  document.querySelector(".modal-title").textContent = "تأكيد التوقع";
+  confirmOk.textContent = "تأكيد وقفل";
+  confirmModalBody.innerHTML = `
+    <span>${m.teamA} <b>vs</b> ${m.teamB}</span>
+    <span class="highlight">${scoreA} — ${scoreB}</span>
+    لو حفظت، التوقع ده هيتقفل ومش هتقدر تغيره.
+    ${dblNote}
+  `;
+  confirmModal.dataset.mode = "prediction";
+  pendingConfirm = {matchId, scoreA, scoreB, isDouble: isDoubleOnThis, round};
+  confirmModal.classList.add("open");
+}
+
+function doSavePrediction({matchId, scoreA, scoreB, isDouble, round}){
   const docId = `${matchId}__${userId}`;
+
+  // doubleUsed[round] اتقفل بالفعل من confirmDouble modal
+
   const data = {
     matchId, uid: userId, userName,
     scoreA: Number(scoreA), scoreB: Number(scoreB),
+    locked: true,
+    isDouble: !!isDouble,
     updatedAt: Date.now()
   };
-  myPredictions[matchId] = {scoreA, scoreB};
+  myPredictions[matchId] = {scoreA, scoreB, locked: true, isDouble: !!isDouble};
+
+  // doubleUsed يتحدد من Firestore — مش محتاجين localStorage
+
   if(db){
     db.collection("predictions").doc(docId).set(data)
-      .then(()=>{ flashSaved(matchId); })
-      .catch(err=>{ console.error(err); alert("حصل خطأ في الحفظ، تأكد من اتصال Firebase."); });
+      .then(()=>{
+        flashSaved(matchId);
+        renderMain(); // لتحديث القفل
+      })
+      .catch(err=>{ console.error(err); alert("حصل خطأ في الحفظ."); });
   } else {
     flashSaved(matchId);
+    renderMain();
   }
 }
 
@@ -787,6 +1156,26 @@ function flashSaved(matchId){
     setTimeout(()=>{ if(tag) tag.textContent=""; }, 2500);
   }
 }
+
+function confirmDouble(matchId, round, m){
+  if(!ensureUser()) return;
+  // دايماً يفتح modal التأكيد — مفيش إلغاء تلقائي
+  confirmModal.dataset.mode = "double";
+  confirmModal.dataset.matchId = matchId;
+  confirmModal.dataset.round = round;
+  document.querySelector(".modal-icon").textContent = "⚡";
+  document.querySelector(".modal-title").textContent = "تأكيد الـ Double";
+  confirmModalBody.innerHTML = `
+    <span>${m.teamA} <b>vs</b> ${m.teamB}</span>
+    <span class="highlight" style="font-size:15px;margin:8px 0;">ده هيضاعف نقاطك على المباراة دي</span>
+    لو أكدت، الـ Double هيتقفل ومش هتقدر تغييره ولا تستخدمه في مباراة تانية في نفس الراوند.
+    <span class="double-note">⚡ مرة واحدة بس في كل راوند — اختار بعقلك!</span>
+  `;
+  confirmOk.textContent = "تأكيد وقفل الـ Double ⚡";
+  confirmModal.classList.add("open");
+}
+
+// toggleDouble removed — double يتقفل فقط عبر confirmDouble modal
 
 function saveResult(matchId){
   const aEl = document.querySelector(`.admin-score[data-result-id="${matchId}"][data-side="A"]`);
@@ -835,8 +1224,9 @@ function renderLeaderboard(){
     if(!totals[uid]) totals[uid] = {name: p.userName || "لاعب", pts:0, exact:0, winner:0, played:0};
     const hasResult = m.resultA!==undefined && m.resultA!==null && m.resultB!==undefined && m.resultB!==null;
     if(!hasResult) return;
-    const pts = calcPoints(p.scoreA, p.scoreB, m.resultA, m.resultB);
+    let pts = calcPoints(p.scoreA, p.scoreB, m.resultA, m.resultB);
     if(pts===null) return;
+    if(p.isDouble) pts = pts * 2;
     totals[uid].pts += pts;
     totals[uid].played += 1;
     if(pts===3) totals[uid].exact += 1;
@@ -956,9 +1346,20 @@ function loadMyPredictions(){
   if(!db || !userId) return;
   db.collection("predictions").where("uid","==",userId).get().then(snap=>{
     myPredictions = {};
+    doubleUsed = {}; // إعادة بناء من Firestore مش من localStorage
     snap.forEach(doc=>{
       const d = doc.data();
-      myPredictions[d.matchId] = {scoreA: String(d.scoreA), scoreB: String(d.scoreB)};
+      myPredictions[d.matchId] = {
+        scoreA: String(d.scoreA),
+        scoreB: String(d.scoreB),
+        locked: !!d.locked,
+        isDouble: !!d.isDouble
+      };
+      // لو فيه double مقفول، سجّله في doubleUsed
+      if(d.isDouble){
+        const m = matches[d.matchId];
+        if(m) doubleUsed[m.round] = d.matchId + "__locked";
+      }
     });
     renderMain();
   });
@@ -974,14 +1375,125 @@ function listenUsers(){
 }
 
 /* ============================================================
+   إدارة الـ Double (أدمن)
+   ============================================================ */
+function openManageDoublePanel(){
+  // اجمع كل اليوزرز اللي عندهم double في أي راوند
+  const usersWithDouble = {};
+  allPredictions.forEach(p=>{
+    if(p.isDouble){
+      const m = matches[p.matchId];
+      if(!m) return;
+      const uid = p.uid || p.userName;
+      const name = p.userName || uid;
+      if(!usersWithDouble[uid]) usersWithDouble[uid] = {name, doubles:[]};
+      usersWithDouble[uid].doubles.push({matchId: p.matchId, round: m.round, teamA: m.teamA, teamB: m.teamB});
+    }
+  });
+
+  const entries = Object.entries(usersWithDouble);
+
+  document.querySelector(".modal-icon").textContent = "⚡";
+  document.querySelector(".modal-title").textContent = "إدارة الـ Double";
+  confirmOk.style.display = "none";
+  confirmCancel.textContent = "إغلاق";
+
+  if(entries.length === 0){
+    confirmModalBody.innerHTML = `<div style="color:var(--muted);padding:10px 0;">مفيش حد استخدم الـ Double لحد دلوقتي.</div>`;
+  } else {
+    confirmModalBody.innerHTML = `
+      <div style="text-align:right;width:100%;">
+        ${entries.map(([uid, u])=>`
+          <div style="background:var(--bg-deep);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px;">
+            <div style="font-family:'Oswald',sans-serif;color:var(--cream);font-size:14px;margin-bottom:8px;">👤 ${u.name}</div>
+            ${u.doubles.map(d=>`
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap;">
+                <span style="font-size:12px;color:var(--gold);flex:1;">⚡ ${d.teamA} vs ${d.teamB} <span style="color:var(--muted)">(${d.round})</span></span>
+                <button class="btn small" style="background:var(--danger);border-color:var(--danger);color:white;font-size:11px;padding:5px 10px;" 
+                  onclick="adminRemoveDouble('${uid}','${d.matchId}')">إلغاء Double</button>
+              </div>
+            `).join("")}
+          </div>
+        `).join("")}
+      </div>
+    `;
+  }
+  confirmModal.dataset.mode = "manage";
+  confirmModal.classList.add("open");
+}
+
+function adminRemoveDouble(uid, matchId){
+  if(!db){ alert("Firebase غير متصل."); return; }
+  const docId = `${matchId}__${uid}`;
+  db.collection("predictions").doc(docId).set({isDouble: false}, {merge:true})
+    .then(()=>{
+      // امسح من doubleUsed لو ده نفس اليوزر الحالي
+      if(uid === userId){
+        const m = matches[matchId];
+        if(m) delete doubleUsed[m.round];
+      }
+      // حدّث allPredictions محلياً
+      const idx = allPredictions.findIndex(p=> p.uid===uid && p.matchId===matchId);
+      if(idx !== -1) allPredictions[idx].isDouble = false;
+      // افتح البانيل تاني بعد التحديث
+      openManageDoublePanel();
+    })
+    .catch(err=>{ console.error(err); alert("حصل خطأ."); });
+}
+
+/* ============================================================
+   Firestore Settings Listener (globalLocked)
+   ============================================================ */
+function listenSettings(onReady){
+  if(!db){
+    onReady && onReady();
+    return;
+  }
+  let firstRead = true;
+  db.collection("settings").doc("global").onSnapshot(doc=>{
+    const prev = globalLocked;
+    globalLocked = doc.exists ? !!doc.data().predictionsLocked : false;
+    if(firstRead){
+      firstRead = false;
+      onReady && onReady(); // ابدأ باقي الـ listeners بعد ما القيمة اتقرأت
+    } else if(prev !== globalLocked){
+      renderMain(); // تحديث مباشر لو اتغيرت بعدين
+    }
+  }, err=>{
+    console.error("settings listener error", err);
+    onReady && onReady(); // حتى لو فيه error، ابدأ عادي
+  });
+}
+
+/* ============================================================
    تشغيل
    ============================================================ */
 setAuthMode("login");
 renderTabs();
 seedMatchesIfEmpty();
-listenMatches();
-listenAllPredictions();
-listenUsers();
+// اقرأ الـ settings الأول، وبعدين ابدأ باقي الـ listeners
+listenSettings(()=>{
+  listenMatches();
+  listenAllPredictions();
+  listenUsers();
+});
+
+// استعادة الجلسة تلقائياً بعد الرفريش
+(function restoreSession(){
+  const savedUid = localStorage.getItem("wc2026_uid");
+  const savedName = localStorage.getItem("wc2026_name");
+  if(savedUid && savedName && db){
+    // تحقق إن الأكونت لسه موجود
+    db.collection("accounts").doc(savedUid).get().then(doc=>{
+      if(doc.exists){
+        onLoggedIn(savedUid, savedName);
+      } else {
+        localStorage.removeItem("wc2026_uid");
+        localStorage.removeItem("wc2026_name");
+      }
+    }).catch(()=>{});
+  }
+})();
 
 </script>
 </body>
