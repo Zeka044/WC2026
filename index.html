@@ -454,7 +454,7 @@ const TEAM_FLAGS = {
   "كينيا":"ke","تنزانيا":"tz","أوغندا":"ug","زامبيا":"zm",
   "زيمبابوي":"zw","موزمبيق":"mz","أنغولا":"ao","الكاميرون":"cm",
   "كوبا":"cu","جواتيمالا":"gt","إل سالفادور":"sv","نيكاراغوا":"ni",
-  "التشيلي":"cl","الباراغواي":"py","البيرو":"pe","الإكوادور":"ec",
+  "التشيلي":"cl","الباراغواي":"py","البيرو":"pe","الإكوادور":"ec","الكونغو":"cd","كاب فيردي":"cv",
 };
 
 // Extra overrides stored in Firestore per match (matchId → {flagA, flagB})
@@ -505,22 +505,22 @@ const FIREBASE_CONFIG = {
 const ADMIN_PIN="2026";
 
 const SEED_MATCHES=[
-  {id:"r32_1",round:"دور الـ32",order:1,teamA:"جنوب أفريقيا",teamB:"كندا",info:"28 يونيو"},
+  {id:"r32_1",round:"دور الـ32",order:1,teamA:"جنوب افريقيا",teamB:"كندا",info:"28 يونيو"},
   {id:"r32_2",round:"دور الـ32",order:2,teamA:"البرازيل",teamB:"اليابان",info:"29 يونيو"},
   {id:"r32_3",round:"دور الـ32",order:3,teamA:"ألمانيا",teamB:"باراغواي",info:"29 يونيو"},
   {id:"r32_4",round:"دور الـ32",order:4,teamA:"المغرب",teamB:"هولندا",info:"30 يونيو"},
   {id:"r32_5",round:"دور الـ32",order:5,teamA:"ساحل العاج",teamB:"النرويج",info:"30 يونيو"},
-  {id:"r32_6",round:"دور الـ32",order:6,teamA:"فرنسا",teamB:"السويد",info:"30 يونيو"},
-  {id:"r32_7",round:"دور الـ32",order:7,teamA:"TBD",teamB:"TBD",info:"تحدد لاحقاً"},
-  {id:"r32_8",round:"دور الـ32",order:8,teamA:"TBD",teamB:"TBD",info:"تحدد لاحقاً"},
-  {id:"r32_9",round:"دور الـ32",order:9,teamA:"TBD",teamB:"TBD",info:"تحدد لاحقاً"},
-  {id:"r32_10",round:"دور الـ32",order:10,teamA:"TBD",teamB:"TBD",info:"تحدد لاحقاً"},
-  {id:"r32_11",round:"دور الـ32",order:11,teamA:"TBD",teamB:"TBD",info:"تحدد لاحقاً"},
-  {id:"r32_12",round:"دور الـ32",order:12,teamA:"TBD",teamB:"TBD",info:"تحدد لاحقاً"},
-  {id:"r32_13",round:"دور الـ32",order:13,teamA:"TBD",teamB:"TBD",info:"تحدد لاحقاً"},
-  {id:"r32_14",round:"دور الـ32",order:14,teamA:"TBD",teamB:"TBD",info:"تحدد لاحقاً"},
-  {id:"r32_15",round:"دور الـ32",order:15,teamA:"TBD",teamB:"TBD",info:"تحدد لاحقاً"},
-  {id:"r32_16",round:"دور الـ32",order:16,teamA:"TBD",teamB:"TBD",info:"تحدد لاحقاً"},
+  {id:"r32_6",round:"دور الـ32",order:6,teamA:"فرنسا",teamB:"السويد",info:"1 يوليو"},
+  {id:"r32_7",round:"دور الـ32",order:7,teamA:"المكسيك",teamB:"الإكوادور",info:"1 يوليو"},
+  {id:"r32_8",round:"دور الـ32",order:8,teamA:"انجلترا",teamB:"الكونغو",info:"1 يوليو"},
+  {id:"r32_9",round:"دور الـ32",order:9,teamA:"بلجيكا",teamB:"السنغال",info:"1 يوليو"},
+  {id:"r32_10",round:"دور الـ32",order:10,teamA:"البوسنة",teamB:"امريكا",info:"2 يوليو"},
+  {id:"r32_11",round:"دور الـ32",order:11,teamA:"النمسا",teamB:"اسبانيا",info:"2 يوليو"},
+  {id:"r32_12",round:"دور الـ32",order:12,teamA:"كرواتيا",teamB:"البرتغال",info:"3 يوليو"},
+  {id:"r32_13",round:"دور الـ32",order:13,teamA:"الجزائر",teamB:"سويسرا",info:"3 يوليو"},
+  {id:"r32_14",round:"دور الـ32",order:14,teamA:"أستراليا",teamB:"مصر",info:"3 يوليو"},
+  {id:"r32_15",round:"دور الـ32",order:15,teamA:"الرأس الاخضر",teamB:"الأرجنتين",info:"4 يوليو"},
+  {id:"r32_16",round:"دور الـ32",order:16,teamA:"غانا",teamB:"كولومبيا",info:"تحدد لاحقاً"},
   {id:"r16_1",round:"دور الـ16",order:1,teamA:"فائز م1",teamB:"فائز م2",info:""},
   {id:"r16_2",round:"دور الـ16",order:2,teamA:"فائز م3",teamB:"فائز م4",info:""},
   {id:"r16_3",round:"دور الـ16",order:3,teamA:"فائز م5",teamB:"فائز م6",info:""},
@@ -1060,7 +1060,7 @@ const ALL_COUNTRIES = [
   ["تنزانيا","tz"],["تايلاند","th"],["تونس","tn"],["تركيا","tr"],["أوغندا","ug"],
   ["أوكرانيا","ua"],["الإمارات","ae"],["إنجلترا","gb-eng"],["إسكتلندا","gb-sct"],["ويلز","gb-wls"],
   ["الولايات المتحدة","us"],["أوروغواي","uy"],["أوزبكستان","uz"],["فنزويلا","ve"],["فيتنام","vn"],
-  ["اليمن","ye"],["زامبيا","zm"],["زيمبابوي","zw"],["الإكوادور","ec"]
+  ["اليمن","ye"],["زامبيا","zm"],["زيمبابوي","zw"],["الإكوادور","ec"],["الكونغو","cd"],["كاب فيردي","cv"],
 ];
 
 let _activePicker=null;
