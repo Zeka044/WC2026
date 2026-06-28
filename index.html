@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>توقعات كأس العالم 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+<!-- Firebase (compat, no build step needed) -->
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+<!-- Auth handled via Firestore accounts collection -->
+
+<style>
+  :root{
+    --bg:#0B1A14;
+    --bg-deep:#06120D;
+    --surface:#122821;
+    --surface-2:#17332A;
+    --line:#26473C;
+    --gold:#D9A53C;
+    --gold-soft:#8C7232;
+    --mint:#46B59B;
+    --mint-dim:#2D6E5D;
+    --cream:#F3EFE3;
+    --muted:#8FA89F;
+    --danger:#C0523F;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(circle at 15% 0%, rgba(70,181,155,0.08), transparent 40%),
+      radial-gradient(circle at 85% 10%, rgba(217,165,60,0.06), transparent 35%),
+      var(--bg);
+    color:var(--cream);
+    font-family:'Tajawal','Inter',sans-serif;
+    min-height:100vh;
+    padding-bottom:60px;
+  }
+  .scoreboard-font{font-family:'Oswald','Tajawal',sans-serif;}
+
+  /* Pitch-line texture header */
+  header.top{
+    position:relative;
+    padding:28px 20px 22px;
+    background:linear-gradient(180deg, var(--bg-deep), var(--bg));
+    border-bottom:1px solid var(--line);
+    overflow:hidden;
+  }
+  header.top::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.025) 0 1px, transparent 1px 90px);
+    pointer-events:none;
+  }
+  .top-inner{max-width:980px;margin:0 auto;position:relative;z-index:1;}
+  .eyebrow{
+    color:var(--gold);
+    font-size:12px;
+    letter-spacing:3px;
+    font-weight:700;
+    text-transform:uppercase;
+    font-family:'Oswald',sans-serif;
+  }
+  h1.title{
+    font-family:'Oswald',sans-serif;
+    font-size:clamp(28px,5vw,42px);
+    margin:6px 0 2px;
+    color:var(--cream);
+    letter-spacing:0.5px;
+  }
+  .title .accent{color:var(--mint);}
+  p.sub{color:var(--muted);margin:0 0 18px;font-size:14.5px;}
+
+  .id-row{
+    display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+  }
+  .id-row input[type=text]{
+    background:var(--surface);
+    border:1px solid var(--line);
+    color:var(--cream);
+    padding:11px 14px;
+    border-radius:10px;
+    font-size:14px;
+    font-family:'Tajawal',sans-serif;
+    min-width:180px;
+    flex:1;
+  }
+  .id-row input[type=text]:focus{outline:2px solid var(--mint);}
+  .btn{
+    background:var(--mint-dim);
+    color:var(--cream);
+    border:1px solid var(--mint);
+    padding:11px 18px;
+    border-radius:10px;
+    font-weight:700;
+    cursor:pointer;
+    font-family:'Tajawal',sans-serif;
+    font-size:14px;
+    transition:transform .12s ease, background .2s ease;
+  }
+  .btn:hover{background:var(--mint);}
+  .btn:active{transform:scale(0.97);}
+  .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);}
+  .btn.ghost:hover{border-color:var(--gold);color:var(--gold);}
+  .btn.gold{background:transparent;border:1px solid var(--gold-soft);color:var(--gold);}
+  .btn.gold:hover{background:var(--gold);color:var(--bg-deep);}
+  .btn.small{padding:7px 12px;font-size:12.5px;}
+
+  .status-pill{
+    font-size:12px;color:var(--muted);
+    border:1px solid var(--line);
+    padding:6px 12px;border-radius:20px;
+    font-family:'Oswald',sans-serif;letter-spacing:0.5px;
+  }
+  .status-pill.live{border-color:var(--mint);color:var(--mint);}
+
+  .auth-box{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:16px;
+    max-width:420px;
+  }
+  .auth-tabs{display:flex;gap:6px;margin-bottom:12px;}
+  .auth-tab{
+    flex:1;text-align:center;padding:8px 10px;border-radius:8px;
+    border:1px solid var(--line);background:transparent;color:var(--muted);
+    cursor:pointer;font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:0.5px;
+  }
+  .auth-tab.active{background:var(--mint-dim);border-color:var(--mint);color:var(--cream);font-weight:600;}
+  .auth-form{display:flex;flex-direction:column;gap:8px;}
+  .auth-form input{
+    background:var(--bg-deep);
+    border:1px solid var(--line);
+    color:var(--cream);
+    padding:11px 14px;
+    border-radius:10px;
+    font-size:14px;
+    font-family:'Tajawal',sans-serif;
+  }
+  .auth-form input:focus{outline:2px solid var(--mint);}
+  .auth-error{color:var(--danger);font-size:12.5px;margin-top:8px;min-height:14px;}
+  .user-box{
+    display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+  }
+  .user-box .welcome{
+    font-family:'Oswald',sans-serif;color:var(--cream);font-size:14px;
+  }
+  .user-box .welcome b{color:var(--gold);}
+
+  nav.tabs{
+    max-width:980px;margin:18px auto 0;
+    display:flex;gap:8px;overflow-x:auto;
+    padding:4px 20px 12px;
+    scrollbar-width:none;
+  }
+  nav.tabs::-webkit-scrollbar{display:none;}
+  .tab{
+    flex:0 0 auto;
+    padding:9px 16px;
+    border-radius:30px;
+    border:1px solid var(--line);
+    color:var(--muted);
+    font-family:'Oswald',sans-serif;
+    font-size:13px;
+    letter-spacing:0.5px;
+    cursor:pointer;
+    white-space:nowrap;
+    background:var(--surface);
+  }
+  .tab.active{
+    background:var(--gold);
+    color:var(--bg-deep);
+    border-color:var(--gold);
+    font-weight:600;
+  }
+
+  main{max-width:980px;margin:0 auto;padding:10px 20px 40px;}
+
+  .round-heading{
+    display:flex;align-items:baseline;gap:10px;
+    margin:28px 0 14px;
+  }
+  .round-heading h2{
+    font-family:'Oswald',sans-serif;
+    font-size:20px;color:var(--gold);
+    margin:0;letter-spacing:0.5px;
+  }
+  .round-heading .count{color:var(--muted);font-size:13px;}
+  .round-heading::after{content:"";flex:1;height:1px;background:var(--line);}
+
+  .match-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:16px 18px;
+    margin-bottom:12px;
+    display:flex;flex-direction:column;gap:12px;
+  }
+  .match-meta{
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:12px;color:var(--muted);
+    font-family:'Oswald',sans-serif;letter-spacing:0.3px;
+  }
+  .match-meta .pts{
+    font-weight:700;
+  }
+  .pts.p3{color:var(--gold);}
+  .pts.p1{color:var(--mint);}
+  .pts.p0{color:var(--danger);}
+
+  .teams-row{
+    display:grid;
+    grid-template-columns:1fr auto 1fr;
+    align-items:center;
+    gap:10px;
+  }
+  .team{
+    display:flex;flex-direction:column;gap:6px;align-items:center;
+    text-align:center;
+  }
+  .team-name{
+    font-family:'Tajawal',sans-serif;
+    font-weight:700;
+    font-size:15px;
+    color:var(--cream);
+    background:transparent;
+    border:none;
+    text-align:center;
+    width:100%;
+    border-bottom:1px dashed transparent;
+  }
+  .team-name[contenteditable="true"]{
+    border-bottom:1px dashed var(--gold-soft);
+    cursor:text;
+  }
+  .score-box{
+    width:52px;height:52px;
+    background:var(--bg-deep);
+    border:1px solid var(--line);
+    border-radius:8px;
+    text-align:center;
+    color:var(--gold);
+    font-family:'Oswald',sans-serif;
+    font-size:26px;
+    font-weight:600;
+  }
+  .score-box:focus{outline:2px solid var(--mint);}
+  .vs-block{
+    display:flex;flex-direction:column;align-items:center;gap:4px;
+  }
+  .vs-label{color:var(--muted);font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:2px;}
+
+  .actual-row{
+    display:flex;justify-content:center;align-items:center;gap:14px;
+    background:var(--bg-deep);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:10px;
+    font-family:'Oswald',sans-serif;
+  }
+  .actual-row .lbl{color:var(--muted);font-size:12px;letter-spacing:1px;}
+  .actual-row .score{color:var(--mint);font-size:20px;font-weight:700;}
+  .actual-row input.admin-score{
+    width:42px;height:36px;background:var(--surface-2);border:1px solid var(--gold-soft);
+    color:var(--gold);text-align:center;border-radius:6px;font-family:'Oswald',sans-serif;font-size:16px;
+  }
+
+  .card-footer{
+    display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
+  }
+  .saved-tag{font-size:12px;color:var(--mint);font-family:'Oswald',sans-serif;}
+
+  .leaderboard{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    overflow:hidden;
+  }
+  table{width:100%;border-collapse:collapse;}
+  thead th{
+    text-align:right;
+    font-family:'Oswald',sans-serif;
+    font-size:12px;letter-spacing:1px;
+    color:var(--muted);
+    padding:12px 16px;
+    border-bottom:1px solid var(--line);
+    background:var(--surface-2);
+  }
+  tbody td{
+    padding:13px 16px;
+    border-bottom:1px solid var(--line);
+    font-size:14px;
+  }
+  tbody tr:last-child td{border-bottom:none;}
+  .rank{
+    font-family:'Oswald',sans-serif;
+    font-weight:700;
+    color:var(--gold);
+    width:36px;
+  }
+  .rank.gold-1{color:var(--gold);font-size:18px;}
+  .rank.silver-2{color:#C9C9C9;}
+  .rank.bronze-3{color:#C98B4F;}
+  .total-pts{font-family:'Oswald',sans-serif;font-weight:700;color:var(--mint);font-size:16px;}
+  .you-row{background:rgba(70,181,155,0.07);}
+
+  .empty{
+    text-align:center;color:var(--muted);padding:40px 10px;font-size:14px;
+  }
+
+  .admin-bar{
+    display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+    background:var(--surface-2);
+    border:1px solid var(--gold-soft);
+    border-radius:10px;
+    padding:10px 14px;
+    margin-bottom:18px;
+    font-size:13px;
+  }
+  .admin-bar input[type=text]{
+    background:var(--bg-deep);border:1px solid var(--line);color:var(--cream);
+    padding:7px 10px;border-radius:6px;width:90px;font-family:'Oswald',sans-serif;
+  }
+
+  footer.note{
+    max-width:980px;margin:30px auto 0;padding:0 20px;
+    color:var(--muted);font-size:12.5px;line-height:1.8;
+  }
+  footer.note code{background:var(--surface);padding:2px 6px;border-radius:4px;color:var(--gold);}
+
+  @media (max-width:540px){
+    .score-box{width:42px;height:42px;font-size:20px;}
+    .team-name{font-size:13px;}
+  }
+
+  ::-webkit-scrollbar{height:8px;width:8px;}
+  ::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px;}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="eyebrow">دور الـ32 → النهائي · 2026</div>
+    <h1 class="title">توقعات <span class="accent">المونديال</span></h1>
+    <p class="sub">اختار يوزر نيم وباسورد وابدأ التوقع. 3 نقاط للنتيجة المضبوطة، نقطة واحدة لو خمّنت الفائز بس.</p>
+
+    <!-- يظهر للزائر اللي لسه مسجلش دخول -->
+    <div class="auth-box" id="authBox">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLogin" type="button">تسجيل دخول</button>
+        <button class="auth-tab" id="tabSignup" type="button">حساب جديد</button>
+      </div>
+      <div class="auth-form">
+        <input type="text" id="signupNameInput" placeholder="اسمك (يظهر في الترتيب)" style="display:none" />
+        <input type="text" id="authEmailInput" placeholder="اليوزر نيم" autocomplete="username" />
+        <input type="password" id="authPasswordInput" placeholder="الباسورد (أرقام)" autocomplete="current-password" />
+        <button class="btn" id="authSubmitBtn">دخول</button>
+      </div>
+      <div class="auth-error" id="authError"></div>
+    </div>
+
+    <!-- يظهر لما المستخدم يكون عامل لوجين -->
+    <div class="user-box" id="userBox" style="display:none">
+      <span class="welcome" id="welcomeUser"></span>
+      <span class="status-pill" id="connStatus">جاري الاتصال…</span>
+      <button class="btn ghost small" id="logoutBtn">تسجيل خروج</button>
+      <button class="btn ghost small" id="adminBtn">دخول كأدمن</button>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs" id="tabsNav"></nav>
+
+<main id="mainArea"></main>
+
+
+<script>
+/* ============================================================
+   1) FIREBASE CONFIG — غيّر القيم دي ببيانات مشروعك من Firebase Console
+   ============================================================ */
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyCa7ZRPUzx4oEz4kLjvVZsS3BoFxrQgUfk",
+  authDomain: "wc-2026-9de97.firebaseapp.com",
+  projectId: "wc-2026-9de97",
+  storageBucket: "wc-2026-9de97.firebasestorage.app",
+  messagingSenderId: "853444520815",
+  appId: "1:853444520815:web:809391eab27920c010969a"
+};
+
+/* PIN الأدمن اللي يسمح بتعديل أسماء الفرق وتسجيل النتيجة الحقيقية.
+   غيّره لأي حاجة تحبها قبل ما تنشر اللعبة. */
+const ADMIN_PIN = "2026";
+
+/* ============================================================
+   2) بيانات المباريات الأساسية (دور الـ32 لحد النهائي)
+   لسه مش كل الفرق متأكدة 100% لحد الآن، فحطيت "TBD" في الأماكن
+   اللي لسه مش معروفة، وتقدر تعدلها من واجهة اللعبة (admin mode)
+   ============================================================ */
+const SEED_MATCHES = [
+  // ---- دور الـ32 (16 مباراة) ----
+  {id:"r32_1", round:"دور الـ32", order:1, teamA:"جنوب أفريقيا", teamB:"كندا", info:"28 يونيو"},
+  {id:"r32_2", round:"دور الـ32", order:2, teamA:"البرازيل", teamB:"اليابان", info:"29 يونيو"},
+  {id:"r32_3", round:"دور الـ32", order:3, teamA:"ألمانيا", teamB:"باراغواي", info:"29 يونيو"},
+  {id:"r32_4", round:"دور الـ32", order:4, teamA:"المغرب", teamB:"هولندا", info:"30 يونيو"},
+  {id:"r32_5", round:"دور الـ32", order:5, teamA:"ساحل العاج", teamB:"النرويج", info:"30 يونيو"},
+  {id:"r32_6", round:"دور الـ32", order:6, teamA:"فرنسا", teamB:"السويد", info:"30 يونيو"},
+  {id:"r32_7", round:"دور الـ32", order:7, teamA:"TBD", teamB:"TBD", info:"تحدد لاحقاً"},
+  {id:"r32_8", round:"دور الـ32", order:8, teamA:"TBD", teamB:"TBD", info:"تحدد لاحقاً"},
+  {id:"r32_9", round:"دور الـ32", order:9, teamA:"TBD", teamB:"TBD", info:"تحدد لاحقاً"},
+  {id:"r32_10", round:"دور الـ32", order:10, teamA:"TBD", teamB:"TBD", info:"تحدد لاحقاً"},
+  {id:"r32_11", round:"دور الـ32", order:11, teamA:"TBD", teamB:"TBD", info:"تحدد لاحقاً"},
+  {id:"r32_12", round:"دور الـ32", order:12, teamA:"TBD", teamB:"TBD", info:"تحدد لاحقاً"},
+  {id:"r32_13", round:"دور الـ32", order:13, teamA:"TBD", teamB:"TBD", info:"تحدد لاحقاً"},
+  {id:"r32_14", round:"دور الـ32", order:14, teamA:"TBD", teamB:"TBD", info:"تحدد لاحقاً"},
+  {id:"r32_15", round:"دور الـ32", order:15, teamA:"TBD", teamB:"TBD", info:"تحدد لاحقاً"},
+  {id:"r32_16", round:"دور الـ32", order:16, teamA:"TBD", teamB:"TBD", info:"تحدد لاحقاً"},
+
+  // ---- دور الـ16 (8 مباريات) ----
+  {id:"r16_1", round:"دور الـ16", order:1, teamA:"فائز م1", teamB:"فائز م2", info:""},
+  {id:"r16_2", round:"دور الـ16", order:2, teamA:"فائز م3", teamB:"فائز م4", info:""},
+  {id:"r16_3", round:"دور الـ16", order:3, teamA:"فائز م5", teamB:"فائز م6", info:""},
+  {id:"r16_4", round:"دور الـ16", order:4, teamA:"فائز م7", teamB:"فائز م8", info:""},
+  {id:"r16_5", round:"دور الـ16", order:5, teamA:"فائز م9", teamB:"فائز م10", info:""},
+  {id:"r16_6", round:"دور الـ16", order:6, teamA:"فائز م11", teamB:"فائز م12", info:""},
+  {id:"r16_7", round:"دور الـ16", order:7, teamA:"فائز م13", teamB:"فائز م14", info:""},
+  {id:"r16_8", round:"دور الـ16", order:8, teamA:"فائز م15", teamB:"فائز م16", info:""},
+
+  // ---- ربع النهائي (4 مباريات) ----
+  {id:"qf_1", round:"ربع النهائي", order:1, teamA:"TBD", teamB:"TBD", info:""},
+  {id:"qf_2", round:"ربع النهائي", order:2, teamA:"TBD", teamB:"TBD", info:""},
+  {id:"qf_3", round:"ربع النهائي", order:3, teamA:"TBD", teamB:"TBD", info:""},
+  {id:"qf_4", round:"ربع النهائي", order:4, teamA:"TBD", teamB:"TBD", info:""},
+
+  // ---- نصف النهائي (2 مباراة) ----
+  {id:"sf_1", round:"نصف النهائي", order:1, teamA:"TBD", teamB:"TBD", info:""},
+  {id:"sf_2", round:"نصف النهائي", order:2, teamA:"TBD", teamB:"TBD", info:""},
+
+  // ---- مركز ثالث ----
+  {id:"third", round:"مركز ثالث", order:1, teamA:"TBD", teamB:"TBD", info:""},
+
+  // ---- النهائي ----
+  {id:"final", round:"النهائي", order:1, teamA:"TBD", teamB:"TBD", info:"19 يوليو"},
+];
+
+const ROUND_ORDER = ["دور الـ32","دور الـ16","ربع النهائي","نصف النهائي","مركز ثالث","النهائي","الترتيب"];
+
+/* ============================================================
+   3) تهيئة Firebase
+   ============================================================ */
+let db = null;
+let firebaseReady = false;
+try{
+  firebase.initializeApp(FIREBASE_CONFIG);
+  db = firebase.firestore();
+  firebaseReady = true;
+}catch(e){
+  console.error("Firebase init failed", e);
+}
+
+/* ============================================================
+   4) حالة محلية
+   ============================================================ */
+let currentUser = null;
+let userId = null;
+let userName = "";
+let isAdmin = false;
+let matches = {};
+let myPredictions = {};
+let allPredictions = [];
+let allUsers = {};
+let activeTab = "دور الـ32";
+let authMode = "login";
+
+const tabsNav = document.getElementById("tabsNav");
+const mainArea = document.getElementById("mainArea");
+const connStatus = document.getElementById("connStatus");
+const authBox = document.getElementById("authBox");
+const userBox = document.getElementById("userBox");
+const welcomeUser = document.getElementById("welcomeUser");
+const tabLogin = document.getElementById("tabLogin");
+const tabSignup = document.getElementById("tabSignup");
+const signupNameInput = document.getElementById("signupNameInput");
+const authEmailInput = document.getElementById("authEmailInput");
+const authPasswordInput = document.getElementById("authPasswordInput");
+const authSubmitBtn = document.getElementById("authSubmitBtn");
+const authError = document.getElementById("authError");
+const logoutBtn = document.getElementById("logoutBtn");
+const adminBtn = document.getElementById("adminBtn");
+
+function setConn(text, live){
+  connStatus.textContent = text;
+  connStatus.classList.toggle("live", !!live);
+}
+
+if(!firebaseReady){
+  setConn("Firebase غير متصل — راجع README", false);
+}
+
+/* ============================================================
+   4.1) تسجيل الدخول / حساب جديد (Firestore accounts)
+   ============================================================ */
+const auth = null; // مش بنستخدم Firebase Auth
+
+function setAuthMode(mode){
+  authMode = mode;
+  tabLogin.classList.toggle("active", mode==="login");
+  tabSignup.classList.toggle("active", mode==="signup");
+  signupNameInput.style.display = mode==="signup" ? "block" : "none";
+  authSubmitBtn.textContent = mode==="signup" ? "إنشاء الحساب" : "دخول";
+  authError.textContent = "";
+}
+tabLogin.onclick = ()=> setAuthMode("login");
+tabSignup.onclick = ()=> setAuthMode("signup");
+
+authSubmitBtn.onclick = async ()=>{
+  if(!db){ alert("Firebase غير متصل."); return; }
+  const username = authEmailInput.value.trim().toLowerCase();
+  const password = authPasswordInput.value.trim();
+  authError.textContent = "";
+
+  if(!username || !password){
+    authError.textContent = "اكتب اليوزر نيم والباسورد.";
+    return;
+  }
+  if(!/^\d+$/.test(password)){
+    authError.textContent = "الباسورد لازم يكون أرقام بس.";
+    return;
+  }
+
+  authSubmitBtn.disabled = true;
+
+  try{
+    if(authMode === "signup"){
+      const displayName = signupNameInput.value.trim();
+      if(!displayName){
+        authError.textContent = "اكتب اسمك الأول.";
+        authSubmitBtn.disabled = false;
+        return;
+      }
+      // تأكد إن اليوزر نيم مش موجود
+      const existing = await db.collection("accounts").doc(username).get();
+      if(existing.exists){
+        authError.textContent = "اليوزر نيم ده موجود قبل كده، جرّب تاني.";
+        authSubmitBtn.disabled = false;
+        return;
+      }
+      // إنشاء الحساب
+      await db.collection("accounts").doc(username).set({
+        username, password, displayName, createdAt: Date.now()
+      });
+      await db.collection("users").doc(username).set({
+        name: displayName, username, createdAt: Date.now()
+      });
+      onLoggedIn(username, displayName);
+    } else {
+      // تسجيل دخول
+      const doc = await db.collection("accounts").doc(username).get();
+      if(!doc.exists){
+        authError.textContent = "اليوزر نيم ده مش موجود، جرّب تعمل حساب جديد.";
+        authSubmitBtn.disabled = false;
+        return;
+      }
+      const data = doc.data();
+      if(data.password !== password){
+        authError.textContent = "الباسورد غلط.";
+        authSubmitBtn.disabled = false;
+        return;
+      }
+      onLoggedIn(username, data.displayName);
+    }
+  } catch(err){
+    console.error(err);
+    authError.textContent = "حصل خطأ، حاول تاني.";
+  }
+  authSubmitBtn.disabled = false;
+};
+
+logoutBtn.onclick = ()=>{
+  onLoggedOut();
+};
+
+adminBtn.onclick = ()=>{
+  if(!userId){ alert("لازم تسجل دخول الأول."); return; }
+  const adminPassword = `${userId}/2026`;
+  const input = prompt("دخل الباسورد ):");
+  if(input === null) return;
+  if(input.trim() === adminPassword){
+    isAdmin = true;
+    alert("تم تفعيل وضع الأدمن ✅");
+    renderMain();
+  } else {
+    alert("كلمة الأدمن غلط.");
+  }
+};
+
+function onLoggedIn(username, displayName){
+  userId = username;
+  userName = displayName || username;
+  authBox.style.display = "none";
+  userBox.style.display = "flex";
+  welcomeUser.innerHTML = `أهلاً، <b>${userName}</b>`;
+  loadMyPredictions();
+  renderMain();
+}
+
+function onLoggedOut(){
+  currentUser = null;
+  userId = null;
+  userName = "";
+  isAdmin = false;
+  myPredictions = {};
+  authBox.style.display = "block";
+  userBox.style.display = "none";
+  renderMain();
+}
+
+/* ============================================================
+   5) بناء التابات
+   ============================================================ */
+function renderTabs(){
+  tabsNav.innerHTML = "";
+  ROUND_ORDER.forEach(r=>{
+    const el = document.createElement("div");
+    el.className = "tab" + (activeTab===r ? " active":"");
+    el.textContent = r;
+    el.onclick = ()=>{ activeTab = r; renderTabs(); renderMain(); };
+    tabsNav.appendChild(el);
+  });
+}
+
+/* ============================================================
+   6) منطق النقاط
+   ============================================================ */
+function calcPoints(predA, predB, actA, actB){
+  if(actA===null || actA===undefined || actB===null || actB===undefined) return null;
+  if(predA===null || predA===undefined || predB===null || predB===undefined) return null;
+  if(predA===actA && predB===actB) return 3;
+  const predSign = Math.sign(predA-predB);
+  const actSign = Math.sign(actA-actB);
+  if(predSign===actSign) return 1;
+  return 0;
+}
+
+/* ============================================================
+   7) عرض المباريات (تاب عادي)
+   ============================================================ */
+function renderMatchesForRound(round){
+  const list = Object.values(matches)
+    .filter(m=>m.round===round)
+    .sort((a,b)=>a.order-b.order);
+
+  if(list.length===0){
+    mainArea.innerHTML = `<div class="empty">لسه مفيش مباريات في هذا الدور.</div>`;
+    return;
+  }
+
+  const wrap = document.createElement("div");
+
+  if(isAdmin){
+    const bar = document.createElement("div");
+    bar.className = "admin-bar";
+    bar.innerHTML = `🔐 وضع الأدمن مفعّل — تقدر تعدل أسماء الفرق وتدخل النتيجة الحقيقية. <button class="btn ghost small" id="exitAdminBtn">خروج من وضع الأدمن</button>`;
+    wrap.appendChild(bar);
+  }
+
+  list.forEach(m=>{
+    wrap.appendChild(buildMatchCard(m));
+  });
+
+  mainArea.innerHTML = "";
+  mainArea.appendChild(wrap);
+
+  if(isAdmin){
+    document.getElementById("exitAdminBtn").onclick = ()=>{ isAdmin=false; renderMain(); };
+  }
+}
+
+function buildMatchCard(m){
+  const card = document.createElement("div");
+  card.className = "match-card";
+
+  const pred = myPredictions[m.id] || {scoreA:"", scoreB:""};
+  const hasResult = m.resultA!==undefined && m.resultA!==null && m.resultB!==undefined && m.resultB!==null;
+  const pts = hasResult ? calcPoints(
+    pred.scoreA===""? null: Number(pred.scoreA),
+    pred.scoreB===""? null: Number(pred.scoreB),
+    m.resultA, m.resultB
+  ) : null;
+
+  const metaRight = hasResult
+    ? (pts===null ? `<span class="pts">لسه ماتوقعتش</span>`
+       : pts===3 ? `<span class="pts p3">+3 🎯 نتيجة مضبوطة</span>`
+       : pts===1 ? `<span class="pts p1">+1 ✅ فائز صحيح</span>`
+       : `<span class="pts p0">0 ❌</span>`)
+    : `<span>مفتوحة للتوقع</span>`;
+
+  card.innerHTML = `
+    <div class="match-meta">
+      <span>${m.round} · مباراة ${m.order}${m.info? " · "+m.info: ""}</span>
+      ${metaRight}
+    </div>
+    <div class="teams-row">
+      <div class="team">
+        <span class="team-name" ${isAdmin?'contenteditable="true"':''} data-side="A" data-id="${m.id}">${m.teamA}</span>
+        <input type="number" min="0" max="30" class="score-box" data-id="${m.id}" data-side="A" value="${pred.scoreA}" placeholder="-" />
+      </div>
+      <div class="vs-block">
+        <span class="vs-label scoreboard-font">VS</span>
+      </div>
+      <div class="team">
+        <span class="team-name" ${isAdmin?'contenteditable="true"':''} data-side="B" data-id="${m.id}">${m.teamB}</span>
+        <input type="number" min="0" max="30" class="score-box" data-id="${m.id}" data-side="B" value="${pred.scoreB}" placeholder="-" />
+      </div>
+    </div>
+    ${isAdmin ? `
+      <div class="actual-row">
+        <span class="lbl scoreboard-font">النتيجة الحقيقية</span>
+        <input type="number" min="0" max="30" class="admin-score" data-result-id="${m.id}" data-side="A" value="${hasResult? m.resultA: ''}" />
+        <span class="lbl">-</span>
+        <input type="number" min="0" max="30" class="admin-score" data-result-id="${m.id}" data-side="B" value="${hasResult? m.resultB: ''}" />
+        <button class="btn gold small" data-save-result="${m.id}">حفظ النتيجة</button>
+      </div>
+    ` : hasResult ? `
+      <div class="actual-row">
+        <span class="lbl scoreboard-font">النتيجة الحقيقية</span>
+        <span class="score">${m.resultA} - ${m.resultB}</span>
+      </div>
+    ` : ``}
+    <div class="card-footer">
+      <button class="btn small" data-save-pred="${m.id}">حفظ توقعي</button>
+      <span class="saved-tag" id="saved_${m.id}"></span>
+    </div>
+  `;
+
+  // مستمعين
+  card.querySelectorAll('[data-save-pred]').forEach(btn=>{
+    btn.onclick = ()=> savePrediction(m.id);
+  });
+  if(isAdmin){
+    card.querySelectorAll('[data-save-result]').forEach(btn=>{
+      btn.onclick = ()=> saveResult(m.id);
+    });
+    card.querySelectorAll('.team-name[contenteditable="true"]').forEach(el=>{
+      el.onblur = ()=> saveTeamName(m.id, el.dataset.side, el.textContent.trim());
+    });
+  }
+
+  return card;
+}
+
+function savePrediction(matchId){
+  if(!ensureUser()) return;
+  const scoreAEl = document.querySelector(`.score-box[data-id="${matchId}"][data-side="A"]`);
+  const scoreBEl = document.querySelector(`.score-box[data-id="${matchId}"][data-side="B"]`);
+  const scoreA = scoreAEl.value;
+  const scoreB = scoreBEl.value;
+  if(scoreA==="" || scoreB===""){
+    alert("اكتب نتيجة للفريقين الاتنين قبل الحفظ.");
+    return;
+  }
+  const docId = `${matchId}__${userId}`;
+  const data = {
+    matchId, uid: userId, userName,
+    scoreA: Number(scoreA), scoreB: Number(scoreB),
+    updatedAt: Date.now()
+  };
+  myPredictions[matchId] = {scoreA, scoreB};
+  if(db){
+    db.collection("predictions").doc(docId).set(data)
+      .then(()=>{ flashSaved(matchId); })
+      .catch(err=>{ console.error(err); alert("حصل خطأ في الحفظ، تأكد من اتصال Firebase."); });
+  } else {
+    flashSaved(matchId);
+  }
+}
+
+function flashSaved(matchId){
+  const tag = document.getElementById(`saved_${matchId}`);
+  if(tag){
+    tag.textContent = "تم الحفظ ✅";
+    setTimeout(()=>{ if(tag) tag.textContent=""; }, 2500);
+  }
+}
+
+function saveResult(matchId){
+  const aEl = document.querySelector(`.admin-score[data-result-id="${matchId}"][data-side="A"]`);
+  const bEl = document.querySelector(`.admin-score[data-result-id="${matchId}"][data-side="B"]`);
+  if(aEl.value==="" || bEl.value===""){
+    alert("اكتب النتيجة كاملة (الفريقين) قبل الحفظ.");
+    return;
+  }
+  const resultA = Number(aEl.value), resultB = Number(bEl.value);
+  if(db){
+    db.collection("matches").doc(matchId).set({resultA, resultB}, {merge:true})
+      .catch(err=>console.error(err));
+  } else {
+    matches[matchId].resultA = resultA;
+    matches[matchId].resultB = resultB;
+    renderMain();
+  }
+}
+
+function saveTeamName(matchId, side, value){
+  if(!value) return;
+  const field = side==="A" ? "teamA" : "teamB";
+  if(db){
+    db.collection("matches").doc(matchId).set({[field]: value}, {merge:true})
+      .catch(err=>console.error(err));
+  } else {
+    matches[matchId][field] = value;
+  }
+}
+
+/* ============================================================
+   8) الترتيب (Leaderboard)
+   ============================================================ */
+function renderLeaderboard(){
+  const totals = {}; // uid -> {name, pts, exact, winner, played}
+
+  // اتأكد إن كل المسجلين (حتى اللي لسه ماتوقعوش) يظهروا في الترتيب بـ 0 نقطة
+  Object.entries(allUsers).forEach(([uid, u])=>{
+    totals[uid] = {name:u.name || u.email || "لاعب", pts:0, exact:0, winner:0, played:0};
+  });
+
+  allPredictions.forEach(p=>{
+    const m = matches[p.matchId];
+    if(!m) return;
+    const uid = p.uid || p.userName; // توافق مع توقعات قديمة كانت بالاسم بس
+    if(!totals[uid]) totals[uid] = {name: p.userName || "لاعب", pts:0, exact:0, winner:0, played:0};
+    const hasResult = m.resultA!==undefined && m.resultA!==null && m.resultB!==undefined && m.resultB!==null;
+    if(!hasResult) return;
+    const pts = calcPoints(p.scoreA, p.scoreB, m.resultA, m.resultB);
+    if(pts===null) return;
+    totals[uid].pts += pts;
+    totals[uid].played += 1;
+    if(pts===3) totals[uid].exact += 1;
+    if(pts===1) totals[uid].winner += 1;
+  });
+
+  const rows = Object.entries(totals)
+    .map(([uid, t])=>({uid, ...t}))
+    .sort((a,b)=> b.pts-a.pts);
+
+  const wrap = document.createElement("div");
+
+  if(rows.length===0){
+    wrap.innerHTML = `<div class="empty">مفيش لاعبين مسجلين لسه. أول ما حد يعمل حساب جديد، هيظهر هنا تلقائي.</div>`;
+    mainArea.innerHTML = "";
+    mainArea.appendChild(wrap);
+    return;
+  }
+
+  const medal = (i)=> i===0?"🥇": i===1?"🥈": i===2?"🥉": (i+1);
+  const rankClass = (i)=> i===0?"rank gold-1": i===1?"rank silver-2": i===2?"rank bronze-3":"rank";
+
+  wrap.innerHTML = `
+    <div class="leaderboard">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th><th>اللاعب</th><th>نتايج مضبوطة</th><th>فايز صحيح</th><th>مباريات محسوبة</th><th>النقاط</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map((r,i)=>`
+            <tr class="${r.uid===userId ? 'you-row':''}">
+              <td class="${rankClass(i)}">${medal(i)}</td>
+              <td>${r.name}${r.uid===userId? " (انت)":""}</td>
+              <td>${r.exact}</td>
+              <td>${r.winner}</td>
+              <td>${r.played}</td>
+              <td class="total-pts">${r.pts}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    </div>
+  `;
+  mainArea.innerHTML = "";
+  mainArea.appendChild(wrap);
+}
+
+/* ============================================================
+   9) Router رئيسي
+   ============================================================ */
+function renderMain(){
+  if(activeTab==="الترتيب"){
+    renderLeaderboard();
+  } else {
+    renderMatchesForRound(activeTab);
+  }
+}
+
+/* ============================================================
+   10) تسجيل الدخول بالاسم + وضع الأدمن
+   ============================================================ */
+function ensureUser(){
+  if(!userId){
+    alert("لازم تسجّل دخول الأول من فوق.");
+    return false;
+  }
+  return true;
+}
+
+/* ============================================================
+   11) Firestore listeners
+   ============================================================ */
+function seedMatchesIfEmpty(){
+  if(!db) return;
+  db.collection("matches").limit(1).get().then(snap=>{
+    if(snap.empty){
+      const batch = db.batch();
+      SEED_MATCHES.forEach(m=>{
+        const ref = db.collection("matches").doc(m.id);
+        batch.set(ref, m);
+      });
+      batch.commit().catch(err=>console.error("seed error", err));
+    }
+  });
+}
+
+function listenMatches(){
+  if(!db){
+    SEED_MATCHES.forEach(m=> matches[m.id]=m);
+    setConn("وضع محلي (بدون مشاركة) — ضيف بيانات Firebase", false);
+    renderMain();
+    return;
+  }
+  db.collection("matches").onSnapshot(snap=>{
+    snap.forEach(doc=>{
+      matches[doc.id] = doc.data();
+    });
+    setConn("متصل ومتزامن مع صحابك", true);
+    renderMain();
+  }, err=>{
+    console.error(err);
+    setConn("خطأ في الاتصال بـ Firebase", false);
+  });
+}
+
+function listenAllPredictions(){
+  if(!db) return;
+  db.collection("predictions").onSnapshot(snap=>{
+    allPredictions = snap.docs.map(d=>d.data());
+    if(activeTab==="الترتيب") renderMain();
+  });
+}
+
+function loadMyPredictions(){
+  if(!db || !userId) return;
+  db.collection("predictions").where("uid","==",userId).get().then(snap=>{
+    myPredictions = {};
+    snap.forEach(doc=>{
+      const d = doc.data();
+      myPredictions[d.matchId] = {scoreA: String(d.scoreA), scoreB: String(d.scoreB)};
+    });
+    renderMain();
+  });
+}
+
+function listenUsers(){
+  if(!db) return;
+  db.collection("users").onSnapshot(snap=>{
+    allUsers = {};
+    snap.forEach(doc=>{ allUsers[doc.id] = doc.data(); });
+    if(activeTab==="الترتيب") renderMain();
+  });
+}
+
+/* ============================================================
+   تشغيل
+   ============================================================ */
+setAuthMode("login");
+renderTabs();
+seedMatchesIfEmpty();
+listenMatches();
+listenAllPredictions();
+listenUsers();
+
+</script>
+</body>
+</html>
