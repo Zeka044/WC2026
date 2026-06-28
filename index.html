@@ -6,565 +6,411 @@
 <title>توقعات كأس العالم 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-
-<!-- Firebase (compat, no build step needed) -->
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
-<!-- Auth handled via Firestore accounts collection -->
-
 <style>
-  :root{
-    --bg:#0B1A14;
-    --bg-deep:#06120D;
-    --surface:#122821;
-    --surface-2:#17332A;
-    --line:#26473C;
-    --gold:#D9A53C;
-    --gold-soft:#8C7232;
-    --mint:#46B59B;
-    --mint-dim:#2D6E5D;
-    --cream:#F3EFE3;
-    --muted:#8FA89F;
-    --danger:#C0523F;
-    --radius:14px;
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    background:
-      radial-gradient(circle at 15% 0%, rgba(70,181,155,0.08), transparent 40%),
-      radial-gradient(circle at 85% 10%, rgba(217,165,60,0.06), transparent 35%),
-      var(--bg);
-    color:var(--cream);
-    font-family:'Tajawal','Inter',sans-serif;
-    min-height:100vh;
-    padding-bottom:60px;
-  }
-  .scoreboard-font{font-family:'Oswald','Tajawal',sans-serif;}
+:root{
+  --bg:#0B1A14;--bg-deep:#06120D;--surface:#122821;--surface-2:#17332A;
+  --line:#26473C;--gold:#D9A53C;--gold-soft:#8C7232;--mint:#46B59B;
+  --mint-dim:#2D6E5D;--cream:#F3EFE3;--muted:#8FA89F;--danger:#C0523F;--radius:14px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:radial-gradient(circle at 15% 0%,rgba(70,181,155,.08),transparent 40%),
+    radial-gradient(circle at 85% 10%,rgba(217,165,60,.06),transparent 35%),var(--bg);
+  color:var(--cream);font-family:'Tajawal','Inter',sans-serif;min-height:100vh;padding-bottom:60px;
+}
+.scoreboard-font{font-family:'Oswald','Tajawal',sans-serif;}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(70,181,155,.4)}50%{box-shadow:0 0 0 8px rgba(70,181,155,0)}}
+@keyframes goldPulse{0%,100%{box-shadow:0 0 0 0 rgba(217,165,60,.5)}50%{box-shadow:0 0 0 10px rgba(217,165,60,0)}}
+@keyframes floatFlag{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes slideDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes countUp{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+@keyframes shimmerGold{0%{background-position:200% center}100%{background-position:-200% center}}
+.card-enter{animation:fadeInUp .38s ease both;}
+header.top{
+  position:relative;padding:32px 20px 28px;
+  background:linear-gradient(180deg,var(--bg-deep),rgba(11,26,20,.97));
+  border-bottom:1px solid var(--line);overflow:hidden;
+}
+header.top::before{
+  content:"";position:absolute;inset:0;
+  background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.02) 0 1px,transparent 1px 90px),
+    repeating-linear-gradient(0deg,rgba(255,255,255,.01) 0 1px,transparent 1px 60px);
+  pointer-events:none;
+}
+.header-deco{
+  position:absolute;width:280px;height:280px;border-radius:50%;
+  background:radial-gradient(circle,rgba(217,165,60,.05) 0%,transparent 70%);
+  bottom:-80px;right:5%;pointer-events:none;
+}
+.top-inner{max-width:980px;margin:0 auto;position:relative;z-index:1;}
+.eyebrow{
+  color:var(--gold);font-size:11px;letter-spacing:4px;font-weight:700;text-transform:uppercase;
+  font-family:'Oswald',sans-serif;display:inline-flex;align-items:center;gap:8px;margin-bottom:6px;
+}
+.eyebrow::before,.eyebrow::after{content:"";display:inline-block;width:20px;height:1px;background:var(--gold);opacity:.5;}
+h1.title{
+  font-family:'Oswald',sans-serif;font-size:clamp(28px,5vw,46px);margin:2px 0 6px;
+  color:var(--cream);letter-spacing:1px;line-height:1.1;
+}
+.title .wc-badge{
+  display:inline-block;
+  background:linear-gradient(135deg,var(--gold),#f0c060);
+  background-size:200% auto;
+  animation:shimmerGold 3s linear infinite;
+  color:var(--bg-deep);font-size:clamp(10px,1.5vw,13px);padding:3px 10px;
+  border-radius:20px;vertical-align:middle;margin-left:6px;font-weight:700;letter-spacing:1px;
+}
+.title .accent{color:var(--mint);}
+p.sub{color:var(--muted);margin:4px 0 20px;font-size:14px;line-height:1.6;}
+.btn{
+  background:var(--mint-dim);color:var(--cream);border:1px solid var(--mint);
+  padding:11px 18px;border-radius:10px;font-weight:700;cursor:pointer;
+  font-family:'Tajawal',sans-serif;font-size:14px;transition:all .2s ease;position:relative;overflow:hidden;
+}
+.btn:hover{background:var(--mint);transform:translateY(-1px);box-shadow:0 4px 16px rgba(70,181,155,.3);}
+.btn:active{transform:scale(.97) translateY(0);}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);}
+.btn.ghost:hover{border-color:var(--gold);color:var(--gold);background:rgba(217,165,60,.06);box-shadow:none;transform:translateY(-1px);}
+.btn.gold{background:transparent;border:1px solid var(--gold-soft);color:var(--gold);}
+.btn.gold:hover{background:var(--gold);color:var(--bg-deep);box-shadow:0 4px 16px rgba(217,165,60,.35);}
+.btn.small{padding:7px 12px;font-size:12.5px;}
+.btn.danger-btn{background:rgba(192,82,63,.12);border-color:var(--danger);color:var(--danger);}
+.btn.danger-btn:hover{background:var(--danger);color:white;box-shadow:0 4px 16px rgba(192,82,63,.35);}
+.status-pill{
+  font-size:11.5px;color:var(--muted);border:1px solid var(--line);
+  padding:5px 12px;border-radius:20px;font-family:'Oswald',sans-serif;letter-spacing:.5px;
+  display:inline-flex;align-items:center;gap:5px;transition:all .3s;
+}
+.status-pill::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--muted);transition:background .3s;}
+.status-pill.live{border-color:var(--mint);color:var(--mint);}
+.status-pill.live::before{background:var(--mint);animation:pulse 1.5s infinite;}
+.auth-box{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:18px;max-width:420px;animation:slideDown .4s ease;box-shadow:0 8px 32px rgba(0,0,0,.3);
+}
+.auth-tabs{display:flex;gap:6px;margin-bottom:14px;}
+.auth-tab{
+  flex:1;text-align:center;padding:9px 10px;border-radius:8px;border:1px solid var(--line);
+  background:transparent;color:var(--muted);cursor:pointer;font-family:'Oswald',sans-serif;
+  font-size:13px;letter-spacing:.5px;transition:all .2s;
+}
+.auth-tab.active{background:var(--mint-dim);border-color:var(--mint);color:var(--cream);font-weight:600;}
+.auth-form{display:flex;flex-direction:column;gap:8px;}
+.auth-form input{
+  background:var(--bg-deep);border:1px solid var(--line);color:var(--cream);
+  padding:12px 14px;border-radius:10px;font-size:14px;font-family:'Tajawal',sans-serif;
+  transition:border-color .2s,box-shadow .2s;
+}
+.auth-form input:focus{outline:none;border-color:var(--mint);box-shadow:0 0 0 3px rgba(70,181,155,.15);}
+.auth-error{color:var(--danger);font-size:12.5px;margin-top:6px;min-height:14px;}
+.user-box{display:flex;flex-wrap:wrap;gap:10px;align-items:center;animation:fadeIn .4s ease;}
+.user-box .welcome{font-family:'Oswald',sans-serif;color:var(--cream);font-size:14px;}
+.user-box .welcome b{color:var(--gold);}
+nav.tabs{
+  max-width:980px;margin:20px auto 0;display:flex;gap:8px;overflow-x:auto;
+  padding:4px 20px 14px;scrollbar-width:none;border-bottom:1px solid var(--line);
+}
+nav.tabs::-webkit-scrollbar{display:none;}
+.tab{
+  flex:0 0 auto;padding:9px 18px;border-radius:30px;border:1px solid var(--line);
+  color:var(--muted);font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.5px;
+  cursor:pointer;white-space:nowrap;background:var(--surface);transition:all .2s ease;
+}
+.tab:hover:not(.active){border-color:var(--mint-dim);color:var(--mint);background:rgba(70,181,155,.06);}
+.tab.active{
+  background:linear-gradient(135deg,var(--gold),#e8b84b);color:var(--bg-deep);
+  border-color:var(--gold);font-weight:700;box-shadow:0 4px 14px rgba(217,165,60,.3);
+}
+main{max-width:980px;margin:0 auto;padding:12px 20px 40px;}
+.round-heading{display:flex;align-items:center;gap:12px;margin:28px 0 16px;}
+.round-heading h2{font-family:'Oswald',sans-serif;font-size:18px;color:var(--gold);margin:0;letter-spacing:1px;}
+.round-heading .count{
+  color:var(--muted);font-size:12px;background:var(--surface);border:1px solid var(--line);
+  padding:3px 10px;border-radius:20px;font-family:'Oswald',sans-serif;
+}
+.round-heading::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent);}
+.match-card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:18px 20px;margin-bottom:14px;display:flex;flex-direction:column;gap:14px;
+  transition:border-color .25s,box-shadow .25s,transform .2s;position:relative;overflow:hidden;
+}
+.match-card::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--line),transparent);transition:background .3s;
+}
+.match-card:hover{border-color:rgba(70,181,155,.3);box-shadow:0 6px 28px rgba(0,0,0,.25);transform:translateY(-2px);}
+.match-card:hover::before{background:linear-gradient(90deg,transparent,var(--mint-dim),transparent);}
+.match-meta{
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:12px;color:var(--muted);font-family:'Oswald',sans-serif;letter-spacing:.3px;
+}
+.match-info-left{display:flex;align-items:center;gap:8px;}
+.match-date-badge{
+  background:var(--bg-deep);border:1px solid var(--line);border-radius:6px;
+  padding:3px 8px;font-size:11px;color:var(--mint);font-family:'Oswald',sans-serif;
+}
+.pts.p3{color:var(--gold);font-weight:700;}
+.pts.p1{color:var(--mint);font-weight:700;}
+.pts.p0{color:var(--danger);font-weight:700;}
+.teams-row{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;}
+.team{display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center;}
+.team-flag-emoji{
+  width:72px;height:48px;object-fit:cover;border-radius:6px;display:block;
+  box-shadow:0 2px 8px rgba(0,0,0,.45);
+  border:1px solid rgba(255,255,255,.08);
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1);
+  cursor:default;
+  animation:floatFlag 4s ease-in-out infinite;
+}
+.team:nth-child(3) .team-flag-emoji{animation-delay:1.2s;}
+.team-flag-emoji:hover{transform:scale(1.12) rotate(-3deg);}
+.team-flag-placeholder{
+  width:72px;height:48px;border-radius:6px;background:var(--surface-2);
+  border:1px dashed var(--line);display:flex;align-items:center;justify-content:center;
+  font-size:22px;color:var(--muted);
+}
+/* Admin flag picker */
+.flag-picker-wrap{position:relative;display:inline-block;}
+.flag-picker-btn{
+  background:none;border:1px dashed var(--gold-soft);border-radius:5px;
+  cursor:pointer;padding:2px 5px;font-size:11px;color:var(--gold);
+  font-family:'Oswald',sans-serif;margin-top:4px;display:block;width:100%;transition:all .2s;
+}
+.flag-picker-btn:hover{background:rgba(217,165,60,.12);border-color:var(--gold);}
+.flag-dropdown{
+  position:absolute;z-index:999;top:100%;left:50%;transform:translateX(-50%);
+  background:var(--surface);border:1px solid var(--line);border-radius:10px;
+  box-shadow:0 8px 32px rgba(0,0,0,.5);padding:8px;width:260px;max-height:240px;
+  overflow-y:auto;display:none;margin-top:4px;
+}
+.flag-dropdown.open{display:block;animation:slideDown .2s ease;}
+.flag-dropdown input.flag-search{
+  width:100%;background:var(--bg-deep);border:1px solid var(--line);
+  color:var(--cream);padding:7px 10px;border-radius:7px;font-size:12px;
+  font-family:'Tajawal',sans-serif;margin-bottom:6px;
+}
+.flag-dropdown input.flag-search:focus{outline:none;border-color:var(--mint);}
+.flag-option{
+  display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:7px;
+  cursor:pointer;transition:background .15s;font-size:12.5px;color:var(--cream);
+  font-family:'Tajawal',sans-serif;
+}
+.flag-option:hover{background:rgba(70,181,155,.12);}
+.flag-option img{width:30px;height:20px;object-fit:cover;border-radius:3px;border:1px solid rgba(255,255,255,.1);}
+.flag-option.no-flag{color:var(--muted);font-style:italic;}
+.team-name{
+  font-family:'Tajawal',sans-serif;font-weight:700;font-size:15px;color:var(--cream);
+  background:transparent;border:none;text-align:center;width:100%;
+  border-bottom:1px dashed transparent;transition:color .2s;
+}
+.team-name[contenteditable="true"]{border-bottom:1px dashed var(--gold-soft);cursor:text;outline:none;}
+.team-name[contenteditable="true"]:focus{color:var(--gold);}
+.score-box{
+  width:56px;height:56px;background:var(--bg-deep);border:1.5px solid var(--line);
+  border-radius:10px;text-align:center;color:var(--gold);font-family:'Oswald',sans-serif;
+  font-size:28px;font-weight:600;transition:border-color .2s,box-shadow .2s;
+}
+.score-box:focus{outline:none;border-color:var(--mint);box-shadow:0 0 0 3px rgba(70,181,155,.2);}
+.score-box:not(:disabled):hover{border-color:var(--mint-dim);}
+.score-box:disabled{opacity:.55;cursor:not-allowed;border-color:var(--line);color:var(--muted);}
+.vs-block{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.vs-label{
+  color:var(--muted);font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:3px;
+  background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:4px 8px;
+}
+.actual-row{
+  display:flex;justify-content:center;align-items:center;gap:14px;
+  background:linear-gradient(135deg,rgba(70,181,155,.07),rgba(70,181,155,.02));
+  border:1px solid var(--mint-dim);border-radius:10px;padding:10px 16px;
+  font-family:'Oswald',sans-serif;animation:fadeIn .3s ease;
+}
+.actual-row .lbl{color:var(--muted);font-size:12px;letter-spacing:1px;}
+.actual-row .score{color:var(--mint);font-size:22px;font-weight:700;letter-spacing:2px;}
+.actual-row input.admin-score{
+  width:42px;height:36px;background:var(--surface-2);border:1px solid var(--gold-soft);
+  color:var(--gold);text-align:center;border-radius:6px;font-family:'Oswald',sans-serif;font-size:16px;
+  transition:border-color .2s;
+}
+.actual-row input.admin-score:focus{outline:none;border-color:var(--gold);}
+.card-footer{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+.saved-tag{font-size:12px;color:var(--mint);font-family:'Oswald',sans-serif;animation:countUp .3s ease;}
+.lock-badge{
+  display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--muted);
+  background:var(--surface-2);border:1px solid var(--line);border-radius:8px;
+  padding:5px 12px;font-family:'Oswald',sans-serif;letter-spacing:.5px;
+}
+.global-lock-banner{
+  background:linear-gradient(135deg,rgba(192,82,63,.12),rgba(192,82,63,.04));
+  border:1.5px solid var(--danger);border-radius:10px;padding:12px 18px;
+  font-family:'Oswald',sans-serif;font-size:13px;color:var(--danger);letter-spacing:.5px;
+  margin-bottom:14px;text-align:center;display:flex;align-items:center;justify-content:center;gap:8px;
+  animation:slideDown .3s ease;
+}
 
-  /* Pitch-line texture header */
-  header.top{
-    position:relative;
-    padding:28px 20px 22px;
-    background:linear-gradient(180deg, var(--bg-deep), var(--bg));
-    border-bottom:1px solid var(--line);
-    overflow:hidden;
-  }
-  header.top::before{
-    content:"";
-    position:absolute; inset:0;
-    background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.025) 0 1px, transparent 1px 90px);
-    pointer-events:none;
-  }
-  .top-inner{max-width:980px;margin:0 auto;position:relative;z-index:1;}
-  .eyebrow{
-    color:var(--gold);
-    font-size:12px;
-    letter-spacing:3px;
-    font-weight:700;
-    text-transform:uppercase;
-    font-family:'Oswald',sans-serif;
-  }
-  h1.title{
-    font-family:'Oswald',sans-serif;
-    font-size:clamp(28px,5vw,42px);
-    margin:6px 0 2px;
-    color:var(--cream);
-    letter-spacing:0.5px;
-  }
-  .title .accent{color:var(--mint);}
-  p.sub{color:var(--muted);margin:0 0 18px;font-size:14.5px;}
+/* ===== DOUBLE — redesigned ===== */
+.double-section{
+  background:linear-gradient(135deg,rgba(217,165,60,.07) 0%,rgba(6,18,13,.5) 100%);
+  border:1.5px solid rgba(140,114,50,.5);border-radius:12px;padding:12px 16px;
+  display:flex;align-items:center;gap:12px;position:relative;overflow:hidden;transition:all .3s;
+}
+.double-section.is-active{
+  background:linear-gradient(135deg,rgba(217,165,60,.15) 0%,rgba(217,165,60,.04) 100%);
+  border-color:var(--gold);animation:goldPulse 2s infinite;
+}
+.double-section-icon{font-size:28px;line-height:1;flex-shrink:0;filter:drop-shadow(0 0 6px rgba(217,165,60,.5));}
+.double-section-label{
+  font-family:'Oswald',sans-serif;font-size:13px;color:var(--gold);
+  letter-spacing:1px;text-transform:uppercase;flex:1;line-height:1.3;
+}
+.double-section-label small{
+  display:block;font-size:11px;color:var(--muted);letter-spacing:0;text-transform:none;
+  margin-top:3px;font-family:'Tajawal',sans-serif;font-weight:400;
+}
+.btn.double-btn{
+  background:linear-gradient(135deg,rgba(217,165,60,.15),rgba(217,165,60,.05));
+  border:1.5px solid var(--gold-soft);color:var(--gold);font-family:'Oswald',sans-serif;
+  font-size:12.5px;letter-spacing:.8px;padding:9px 18px;border-radius:9px;
+  cursor:pointer;transition:all .25s;white-space:nowrap;display:flex;align-items:center;gap:6px;
+}
+.btn.double-btn:hover:not(:disabled){
+  background:linear-gradient(135deg,var(--gold),#e8b84b);color:var(--bg-deep);
+  border-color:var(--gold);box-shadow:0 0 20px rgba(217,165,60,.4);transform:translateY(-1px);
+}
+.btn.double-btn:disabled{cursor:not-allowed;opacity:.4;}
+.double-locked-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:linear-gradient(135deg,rgba(217,165,60,.18),rgba(140,114,50,.08));
+  border:1.5px solid var(--gold);border-radius:8px;padding:7px 14px;
+  font-family:'Oswald',sans-serif;font-size:12px;color:var(--gold);
+  letter-spacing:.5px;animation:countUp .3s ease;
+}
+.match-card.double-locked{
+  border-color:rgba(217,165,60,.5);
+  background:linear-gradient(160deg,rgba(217,165,60,.08) 0%,var(--surface) 60%);
+  box-shadow:0 0 0 1px rgba(217,165,60,.15),0 6px 28px rgba(217,165,60,.07);
+}
+.match-card.double-locked::before{
+  background:linear-gradient(90deg,rgba(217,165,60,.5),rgba(217,165,60,.1),transparent);
+}
 
-  .id-row{
-    display:flex;flex-wrap:wrap;gap:10px;align-items:center;
-  }
-  .id-row input[type=text]{
-    background:var(--surface);
-    border:1px solid var(--line);
-    color:var(--cream);
-    padding:11px 14px;
-    border-radius:10px;
-    font-size:14px;
-    font-family:'Tajawal',sans-serif;
-    min-width:180px;
-    flex:1;
-  }
-  .id-row input[type=text]:focus{outline:2px solid var(--mint);}
-  .btn{
-    background:var(--mint-dim);
-    color:var(--cream);
-    border:1px solid var(--mint);
-    padding:11px 18px;
-    border-radius:10px;
-    font-weight:700;
-    cursor:pointer;
-    font-family:'Tajawal',sans-serif;
-    font-size:14px;
-    transition:transform .12s ease, background .2s ease;
-  }
-  .btn:hover{background:var(--mint);}
-  .btn:active{transform:scale(0.97);}
-  .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--muted);}
-  .btn.ghost:hover{border-color:var(--gold);color:var(--gold);}
-  .btn.gold{background:transparent;border:1px solid var(--gold-soft);color:var(--gold);}
-  .btn.gold:hover{background:var(--gold);color:var(--bg-deep);}
-  .btn.small{padding:7px 12px;font-size:12.5px;}
+/* Admin bar */
+.match-card.match-locked{
+  border-color:rgba(192,82,63,.4);
+  background:linear-gradient(160deg,rgba(192,82,63,.06) 0%,var(--surface) 60%);
+}
+.match-card.match-locked::before{
+  background:linear-gradient(90deg,rgba(192,82,63,.5),rgba(192,82,63,.1),transparent);
+}
+.admin-bar{
+  display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+  background:linear-gradient(135deg,rgba(217,165,60,.06),rgba(217,165,60,.02));
+  border:1px solid var(--gold-soft);border-radius:12px;
+  padding:12px 16px;margin-bottom:20px;font-size:13px;animation:slideDown .3s ease;
+}
 
-  .status-pill{
-    font-size:12px;color:var(--muted);
-    border:1px solid var(--line);
-    padding:6px 12px;border-radius:20px;
-    font-family:'Oswald',sans-serif;letter-spacing:0.5px;
-  }
-  .status-pill.live{border-color:var(--mint);color:var(--mint);}
+/* Leaderboard */
+.leaderboard{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.2);}
+table{width:100%;border-collapse:collapse;}
+thead th{
+  text-align:right;font-family:'Oswald',sans-serif;font-size:11.5px;letter-spacing:1.5px;
+  color:var(--muted);padding:14px 16px;border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg,var(--surface-2),var(--surface));text-transform:uppercase;
+}
+tbody td{padding:14px 16px;border-bottom:1px solid rgba(38,71,60,.5);font-size:14px;transition:background .15s;}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover td{background:rgba(255,255,255,.02);}
+.rank{font-family:'Oswald',sans-serif;font-weight:700;color:var(--gold);width:42px;font-size:16px;}
+.rank.gold-1{font-size:20px;}
+.rank.silver-2{color:#C9C9C9;}
+.rank.bronze-3{color:#C98B4F;}
+.total-pts{font-family:'Oswald',sans-serif;font-weight:700;color:var(--mint);font-size:18px;}
+.you-row td{background:rgba(70,181,155,.06)!important;}
+.player-name-cell{display:flex;align-items:center;gap:8px;}
+.empty{text-align:center;color:var(--muted);padding:50px 10px;font-size:14px;line-height:2;}
+.empty-icon{font-size:40px;display:block;margin-bottom:10px;}
 
-  .auth-box{
-    background:var(--surface);
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    padding:16px;
-    max-width:420px;
-  }
-  .auth-tabs{display:flex;gap:6px;margin-bottom:12px;}
-  .auth-tab{
-    flex:1;text-align:center;padding:8px 10px;border-radius:8px;
-    border:1px solid var(--line);background:transparent;color:var(--muted);
-    cursor:pointer;font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:0.5px;
-  }
-  .auth-tab.active{background:var(--mint-dim);border-color:var(--mint);color:var(--cream);font-weight:600;}
-  .auth-form{display:flex;flex-direction:column;gap:8px;}
-  .auth-form input{
-    background:var(--bg-deep);
-    border:1px solid var(--line);
-    color:var(--cream);
-    padding:11px 14px;
-    border-radius:10px;
-    font-size:14px;
-    font-family:'Tajawal',sans-serif;
-  }
-  .auth-form input:focus{outline:2px solid var(--mint);}
-  .auth-error{color:var(--danger);font-size:12.5px;margin-top:8px;min-height:14px;}
-  .user-box{
-    display:flex;flex-wrap:wrap;gap:10px;align-items:center;
-  }
-  .user-box .welcome{
-    font-family:'Oswald',sans-serif;color:var(--cream);font-size:14px;
-  }
-  .user-box .welcome b{color:var(--gold);}
-
-  nav.tabs{
-    max-width:980px;margin:18px auto 0;
-    display:flex;gap:8px;overflow-x:auto;
-    padding:4px 20px 12px;
-    scrollbar-width:none;
-  }
-  nav.tabs::-webkit-scrollbar{display:none;}
-  .tab{
-    flex:0 0 auto;
-    padding:9px 16px;
-    border-radius:30px;
-    border:1px solid var(--line);
-    color:var(--muted);
-    font-family:'Oswald',sans-serif;
-    font-size:13px;
-    letter-spacing:0.5px;
-    cursor:pointer;
-    white-space:nowrap;
-    background:var(--surface);
-  }
-  .tab.active{
-    background:var(--gold);
-    color:var(--bg-deep);
-    border-color:var(--gold);
-    font-weight:600;
-  }
-
-  main{max-width:980px;margin:0 auto;padding:10px 20px 40px;}
-
-  .round-heading{
-    display:flex;align-items:baseline;gap:10px;
-    margin:28px 0 14px;
-  }
-  .round-heading h2{
-    font-family:'Oswald',sans-serif;
-    font-size:20px;color:var(--gold);
-    margin:0;letter-spacing:0.5px;
-  }
-  .round-heading .count{color:var(--muted);font-size:13px;}
-  .round-heading::after{content:"";flex:1;height:1px;background:var(--line);}
-
-  .match-card{
-    background:var(--surface);
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    padding:16px 18px;
-    margin-bottom:12px;
-    display:flex;flex-direction:column;gap:12px;
-  }
-  .match-meta{
-    display:flex;justify-content:space-between;align-items:center;
-    font-size:12px;color:var(--muted);
-    font-family:'Oswald',sans-serif;letter-spacing:0.3px;
-  }
-  .match-meta .pts{
-    font-weight:700;
-  }
-  .pts.p3{color:var(--gold);}
-  .pts.p1{color:var(--mint);}
-  .pts.p0{color:var(--danger);}
-
-  .teams-row{
-    display:grid;
-    grid-template-columns:1fr auto 1fr;
-    align-items:center;
-    gap:10px;
-  }
-  .team{
-    display:flex;flex-direction:column;gap:6px;align-items:center;
-    text-align:center;
-  }
-  .team-name{
-    font-family:'Tajawal',sans-serif;
-    font-weight:700;
-    font-size:15px;
-    color:var(--cream);
-    background:transparent;
-    border:none;
-    text-align:center;
-    width:100%;
-    border-bottom:1px dashed transparent;
-  }
-  .team-name[contenteditable="true"]{
-    border-bottom:1px dashed var(--gold-soft);
-    cursor:text;
-  }
-  .score-box{
-    width:52px;height:52px;
-    background:var(--bg-deep);
-    border:1px solid var(--line);
-    border-radius:8px;
-    text-align:center;
-    color:var(--gold);
-    font-family:'Oswald',sans-serif;
-    font-size:26px;
-    font-weight:600;
-  }
-  .score-box:focus{outline:2px solid var(--mint);}
-  .vs-block{
-    display:flex;flex-direction:column;align-items:center;gap:4px;
-  }
-  .vs-label{color:var(--muted);font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:2px;}
-
-  .actual-row{
-    display:flex;justify-content:center;align-items:center;gap:14px;
-    background:var(--bg-deep);
-    border:1px solid var(--line);
-    border-radius:10px;
-    padding:10px;
-    font-family:'Oswald',sans-serif;
-  }
-  .actual-row .lbl{color:var(--muted);font-size:12px;letter-spacing:1px;}
-  .actual-row .score{color:var(--mint);font-size:20px;font-weight:700;}
-  .actual-row input.admin-score{
-    width:42px;height:36px;background:var(--surface-2);border:1px solid var(--gold-soft);
-    color:var(--gold);text-align:center;border-radius:6px;font-family:'Oswald',sans-serif;font-size:16px;
-  }
-
-  .card-footer{
-    display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
-  }
-  .saved-tag{font-size:12px;color:var(--mint);font-family:'Oswald',sans-serif;}
-
-  .leaderboard{
-    background:var(--surface);
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    overflow:hidden;
-  }
-  table{width:100%;border-collapse:collapse;}
-  thead th{
-    text-align:right;
-    font-family:'Oswald',sans-serif;
-    font-size:12px;letter-spacing:1px;
-    color:var(--muted);
-    padding:12px 16px;
-    border-bottom:1px solid var(--line);
-    background:var(--surface-2);
-  }
-  tbody td{
-    padding:13px 16px;
-    border-bottom:1px solid var(--line);
-    font-size:14px;
-  }
-  tbody tr:last-child td{border-bottom:none;}
-  .rank{
-    font-family:'Oswald',sans-serif;
-    font-weight:700;
-    color:var(--gold);
-    width:36px;
-  }
-  .rank.gold-1{color:var(--gold);font-size:18px;}
-  .rank.silver-2{color:#C9C9C9;}
-  .rank.bronze-3{color:#C98B4F;}
-  .total-pts{font-family:'Oswald',sans-serif;font-weight:700;color:var(--mint);font-size:16px;}
-  .you-row{background:rgba(70,181,155,0.07);}
-
-  .empty{
-    text-align:center;color:var(--muted);padding:40px 10px;font-size:14px;
-  }
-
-  .admin-bar{
-    display:flex;gap:8px;align-items:center;flex-wrap:wrap;
-    background:var(--surface-2);
-    border:1px solid var(--gold-soft);
-    border-radius:10px;
-    padding:10px 14px;
-    margin-bottom:18px;
-    font-size:13px;
-  }
-  .admin-bar input[type=text]{
-    background:var(--bg-deep);border:1px solid var(--line);color:var(--cream);
-    padding:7px 10px;border-radius:6px;width:90px;font-family:'Oswald',sans-serif;
-  }
-
-  footer.note{
-    max-width:980px;margin:30px auto 0;padding:0 20px;
-    color:var(--muted);font-size:12.5px;line-height:1.8;
-  }
-  footer.note code{background:var(--surface);padding:2px 6px;border-radius:4px;color:var(--gold);}
-
-  @media (max-width:540px){
-    .score-box{width:42px;height:42px;font-size:20px;}
-    .team-name{font-size:13px;}
-  }
-
-  ::-webkit-scrollbar{height:8px;width:8px;}
-  ::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px;}
-
-  /* ---- Lock overlay on score boxes ---- */
-  .score-box:disabled{
-    opacity:0.6;
-    cursor:not-allowed;
-    border-color:var(--line);
-    color:var(--muted);
-  }
-  .lock-badge{
-    display:inline-flex;align-items:center;gap:5px;
-    font-size:11.5px;color:var(--gold);
-    font-family:'Oswald',sans-serif;letter-spacing:0.5px;
-  }
-
-  /* ---- Global locked banner ---- */
-  .global-lock-banner{
-    background: linear-gradient(135deg, rgba(192,82,63,0.15), rgba(192,82,63,0.05));
-    border: 1.5px solid var(--danger);
-    border-radius: 10px;
-    padding: 10px 16px;
-    font-family:'Oswald',sans-serif;
-    font-size:13px;
-    color: var(--danger);
-    letter-spacing: 0.5px;
-    margin-bottom: 12px;
-    text-align: center;
-  }
-
-  /* ---- Double section & button ---- */
-  .double-section{
-    background: linear-gradient(135deg, rgba(217,165,60,0.09) 0%, rgba(6,18,13,0.4) 100%);
-    border: 1.5px solid var(--gold-soft);
-    border-radius: 10px;
-    padding: 10px 14px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    position: relative;
-    overflow: hidden;
-    margin-top: 2px;
-  }
-  .double-section::after{
-    content:"⚡";
-    position:absolute;
-    left:8px; top:50%;
-    transform:translateY(-50%);
-    font-size:52px;
-    opacity:0.05;
-    pointer-events:none;
-    line-height:1;
-  }
-  .double-section-label{
-    font-family:'Oswald',sans-serif;
-    font-size:12px;
-    color:var(--gold);
-    letter-spacing:1px;
-    text-transform:uppercase;
-    flex:1;
-    line-height:1.4;
-    position:relative;z-index:1;
-  }
-  .double-section-label small{
-    display:block;
-    font-size:10.5px;
-    color:var(--muted);
-    letter-spacing:0;
-    text-transform:none;
-    margin-top:2px;
-    font-family:'Tajawal',sans-serif;
-  }
-  .btn.double-btn{
-    background: linear-gradient(135deg, rgba(217,165,60,0.18), rgba(217,165,60,0.06));
-    border: 1.5px solid var(--gold-soft);
-    color: var(--gold);
-    font-family:'Oswald',sans-serif;
-    font-size:12.5px;
-    letter-spacing:0.8px;
-    padding: 8px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all .2s;
-    white-space:nowrap;
-    position:relative;z-index:1;
-  }
-  .btn.double-btn:hover{
-    background: var(--gold);
-    color: var(--bg-deep);
-    border-color: var(--gold);
-    box-shadow: 0 0 16px rgba(217,165,60,0.4);
-  }
-  .btn.double-btn.active-double{
-    background: var(--gold);
-    color: var(--bg-deep);
-    border-color: var(--gold);
-    box-shadow: 0 0 18px rgba(217,165,60,0.5);
-    font-weight:700;
-  }
-  .btn.double-btn.used{
-    cursor: default;
-    opacity: 0.5;
-  }
-  .btn.double-btn.used:hover{
-    background: linear-gradient(135deg, rgba(217,165,60,0.18), rgba(217,165,60,0.06));
-    color: var(--gold);
-    border-color: var(--gold-soft);
-    box-shadow: none;
-  }
-  /* كارت فيه double مقفول — هايلايت واضح */
-  .match-card.double-locked{
-    border-color: rgba(217,165,60,0.6);
-    background: linear-gradient(160deg, rgba(217,165,60,0.11) 0%, var(--surface) 50%);
-    box-shadow: 0 0 0 1.5px rgba(217,165,60,0.2), 0 4px 24px rgba(217,165,60,0.08);
-    position: relative;
-  }
-  .match-card.double-locked::before{
-    content: "⚡";
-    position: absolute;
-    top: 10px;
-    left: 14px;
-    font-size: 13px;
-    opacity: 0.55;
-    pointer-events: none;
-  }
-  .double-locked-badge{
-    display:inline-flex;align-items:center;gap:6px;
-    background: linear-gradient(135deg, rgba(217,165,60,0.2), rgba(140,114,50,0.1));
-    border: 1.5px solid var(--gold);
-    border-radius: 8px;
-    padding: 6px 12px;
-    font-family:'Oswald',sans-serif;
-    font-size:12px;
-    color: var(--gold);
-    letter-spacing:0.5px;
-  }
-
-  /* ---- Confirmation Modal ---- */
-  .modal-backdrop{
-    position:fixed;inset:0;
-    background:rgba(6,18,13,0.82);
-    backdrop-filter:blur(4px);
-    z-index:1000;
-    display:flex;align-items:center;justify-content:center;
-    padding:20px;
-    opacity:0;pointer-events:none;
-    transition:opacity .2s;
-  }
-  .modal-backdrop.open{opacity:1;pointer-events:all;}
-  .modal{
-    background:var(--surface);
-    border:1px solid var(--gold-soft);
-    border-radius:16px;
-    padding:28px 24px;
-    max-width:380px;width:100%;
-    text-align:center;
-    transform:translateY(8px);
-    transition:transform .2s;
-    box-shadow:0 20px 60px rgba(0,0,0,0.5);
-  }
-  .modal-backdrop.open .modal{transform:translateY(0);}
-  .modal-icon{font-size:32px;margin-bottom:10px;}
-  .modal-title{
-    font-family:'Oswald',sans-serif;
-    font-size:18px;color:var(--cream);
-    margin:0 0 6px;letter-spacing:0.5px;
-  }
-  .modal-body{
-    color:var(--muted);font-size:14px;
-    line-height:1.6;margin-bottom:20px;
-  }
-  .modal-body .highlight{
-    color:var(--gold);font-weight:700;
-    font-family:'Oswald',sans-serif;font-size:20px;
-    display:block;margin:10px 0;
-  }
-  .modal-body .double-note{
-    color:var(--mint);font-size:12.5px;
-    border:1px solid var(--mint-dim);
-    border-radius:8px;padding:6px 10px;
-    margin-top:8px;display:block;
-  }
-  .modal-actions{display:flex;gap:10px;justify-content:center;}
-  .modal-actions .btn{flex:1;padding:12px;}
+/* Modal */
+.modal-backdrop{
+  position:fixed;inset:0;background:rgba(6,18,13,.87);backdrop-filter:blur(6px);
+  z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .25s;
+}
+.modal-backdrop.open{opacity:1;pointer-events:all;}
+.modal{
+  background:linear-gradient(160deg,var(--surface-2),var(--surface));
+  border:1px solid var(--line);border-radius:18px;padding:30px 26px;max-width:390px;width:100%;
+  text-align:center;transform:translateY(16px) scale(.97);
+  transition:transform .28s cubic-bezier(.34,1.56,.64,1),opacity .25s;
+  box-shadow:0 24px 64px rgba(0,0,0,.6);opacity:0;
+}
+.modal-backdrop.open .modal{transform:translateY(0) scale(1);opacity:1;}
+.modal-icon{font-size:36px;margin-bottom:12px;display:block;}
+.modal-title{font-family:'Oswald',sans-serif;font-size:20px;color:var(--cream);margin:0 0 8px;letter-spacing:.5px;}
+.modal-body{color:var(--muted);font-size:14px;line-height:1.7;margin-bottom:22px;}
+.modal-body .highlight{
+  color:var(--gold);font-weight:700;font-family:'Oswald',sans-serif;font-size:22px;
+  display:block;margin:10px 0;letter-spacing:1px;
+}
+.modal-body .double-note{
+  color:var(--mint);font-size:12.5px;background:rgba(70,181,155,.08);
+  border:1px solid var(--mint-dim);border-radius:8px;padding:8px 12px;
+  margin-top:10px;display:block;line-height:1.5;
+}
+.modal-actions{display:flex;gap:10px;justify-content:center;}
+.modal-actions .btn{flex:1;padding:13px;}
+::-webkit-scrollbar{height:6px;width:6px;}
+::-webkit-scrollbar-track{background:var(--bg-deep);}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px;}
+::-webkit-scrollbar-thumb:hover{background:var(--mint-dim);}
+@media(max-width:540px){
+  .score-box{width:46px;height:46px;font-size:22px;}
+  .team-name{font-size:13px;}
+  .team-flag-emoji{font-size:30px;}
+  h1.title{font-size:26px;}
+}
 </style>
 </head>
 <body>
 
 <header class="top">
+  <div class="header-deco"></div>
   <div class="top-inner">
     <div class="eyebrow">دور الـ32 → النهائي · 2026</div>
-    <h1 class="title">توقعات <span class="accent">المونديال</span></h1>
-    <p class="sub">اختار يوزر نيم وباسورد وابدأ التوقع. 3 نقاط للنتيجة المضبوطة، نقطة واحدة لو خمّنت الفائز بس.</p>
-
-    <!-- يظهر للزائر اللي لسه مسجلش دخول -->
+    <h1 class="title">توقعات <span class="accent">المونديال</span> <span class="wc-badge">FIFA 2026</span></h1>
+    <p class="sub">اختار يوزر نيم وباسورد وابدأ التوقع — 3 نقاط للنتيجة المضبوطة، نقطة واحدة لو خمّنت الفائز بس.</p>
     <div class="auth-box" id="authBox">
       <div class="auth-tabs">
         <button class="auth-tab active" id="tabLogin" type="button">تسجيل دخول</button>
         <button class="auth-tab" id="tabSignup" type="button">حساب جديد</button>
       </div>
       <div class="auth-form">
-        <input type="text" id="signupNameInput" placeholder="اسمك (يظهر في الترتيب)" style="display:none" />
-        <input type="text" id="authEmailInput" placeholder="اليوزر نيم" autocomplete="username" />
-        <input type="password" id="authPasswordInput" placeholder="الباسورد (أرقام)" autocomplete="current-password" />
+        <input type="text" id="signupNameInput" placeholder="اسمك (يظهر في الترتيب)" style="display:none"/>
+        <input type="text" id="authEmailInput" placeholder="اليوزر نيم" autocomplete="username"/>
+        <input type="password" id="authPasswordInput" placeholder="الباسورد (أرقام)" autocomplete="current-password"/>
         <button class="btn" id="authSubmitBtn">دخول</button>
       </div>
       <div class="auth-error" id="authError"></div>
     </div>
-
-    <!-- يظهر لما المستخدم يكون عامل لوجين -->
     <div class="user-box" id="userBox" style="display:none">
       <span class="welcome" id="welcomeUser"></span>
       <span class="status-pill" id="connStatus">جاري الاتصال…</span>
-      <button class="btn ghost small" id="logoutBtn">تسجيل خروج</button>
-      <button class="btn ghost small" id="adminBtn">دخول كأدمن</button>
+      <button class="btn ghost small" id="logoutBtn">خروج</button>
+      <button class="btn ghost small" id="adminBtn">أدمن</button>
     </div>
   </div>
 </header>
 
 <nav class="tabs" id="tabsNav"></nav>
-
 <main id="mainArea"></main>
 
-<!-- Confirmation Modal -->
 <div class="modal-backdrop" id="confirmModal">
   <div class="modal">
-    <div class="modal-icon">🔒</div>
+    <span class="modal-icon">🔒</span>
     <h3 class="modal-title">تأكيد التوقع</h3>
     <div class="modal-body" id="confirmModalBody"></div>
     <div class="modal-actions">
@@ -574,927 +420,723 @@
   </div>
 </div>
 
-
 <script>
 /* ============================================================
-   1) FIREBASE CONFIG — غيّر القيم دي ببيانات مشروعك من Firebase Console
+   FLAG DATABASE — كودات البلاد (ISO 3166-1 alpha-2) لـ flagcdn.com
+   لما تضيف منتخب جديد، ضيف اسمه بالعربي وكود البلد
+   ============================================================ */
+const TEAM_FLAGS = {
+  "البرازيل":"br","الأرجنتين":"ar","فرنسا":"fr","إسبانيا":"es",
+  "ألمانيا":"de","إنجلترا":"gb-eng","البرتغال":"pt","هولندا":"nl",
+  "بلجيكا":"be","كرواتيا":"hr","المغرب":"ma","السنغال":"sn",
+  "غانا":"gh","نيجيريا":"ng","كاميرون":"cm","تونس":"tn",
+  "جنوب أفريقيا":"za","ساحل العاج":"ci","مصر":"eg","الجزائر":"dz",
+  "كندا":"ca","المكسيك":"mx","الولايات المتحدة":"us","أمريكا":"us",
+  "الأوروغواي":"uy","الإكوادور":"ec","البيرو":"pe","كولومبيا":"co",
+  "فنزويلا":"ve","تشيلي":"cl","باراغواي":"py","بوليفيا":"bo",
+  "اليابان":"jp","كوريا الجنوبية":"kr","إيران":"ir","أستراليا":"au",
+  "قطر":"qa","المملكة العربية السعودية":"sa","الإمارات":"ae","العراق":"iq",
+  "الأردن":"jo","سوريا":"sy","السويد":"se","النرويج":"no",
+  "الدنمارك":"dk","سويسرا":"ch","النمسا":"at","بولندا":"pl",
+  "التشيك":"cz","رومانيا":"ro","أوكرانيا":"ua","تركيا":"tr",
+  "اليونان":"gr","إيطاليا":"it","صربيا":"rs","نيوزيلندا":"nz",
+  "إندونيسيا":"id","كوستاريكا":"cr","بنما":"pa","هندوراس":"hn",
+  "جامايكا":"jm","المجر":"hu","سلوفينيا":"si","ألبانيا":"al",
+  "جورجيا":"ge","إسكتلندا":"gb-sct","ويلز":"gb-wls",
+  "الجبل الأسود":"me","أوزبكستان":"uz","طاجيكستان":"tj",
+  "البوسنة":"ba","أيرلندا":"ie","فنلندا":"fi","إسرائيل":"il",
+  "سلوفاكيا":"sk","كوسوفو":"xk","أيسلندا":"is","قبرص":"cy",
+  "لوكسمبورغ":"lu","مالطا":"mt","أندورا":"ad","بيلاروسيا":"by",
+  "مولدوفا":"md","ليتوانيا":"lt","لاتفيا":"lv","إستونيا":"ee",
+  "بلغاريا":"bg","مقدونيا":"mk","أرمينيا":"am","أذربيجان":"az",
+  "فيتنام":"vn","تايلاند":"th","الصين":"cn","الهند":"in",
+  "باكستان":"pk","بنغلاديش":"bd","السودان":"sd","إثيوبيا":"et",
+  "كينيا":"ke","تنزانيا":"tz","أوغندا":"ug","زامبيا":"zm",
+  "زيمبابوي":"zw","موزمبيق":"mz","أنغولا":"ao","الكاميرون":"cm",
+  "كوبا":"cu","جواتيمالا":"gt","إل سالفادور":"sv","نيكاراغوا":"ni",
+  "التشيلي":"cl","الباراغواي":"py","البيرو":"pe","الإكوادور":"ec",
+};
+
+// Extra overrides stored in Firestore per match (matchId → {flagA, flagB})
+let matchFlagOverrides = {};
+
+function getFlagCode(name){
+  if(!name||name==="TBD"||name.startsWith("فائز")) return null;
+  return TEAM_FLAGS[name.trim()]||null;
+}
+
+function getFlagUrl(code){
+  return `https://flagcdn.com/w80/${code}.png`;
+}
+
+function getFlag(name){ return getFlagCode(name); }  // kept for compat
+
+function flagHtml(name, matchId, side){
+  const override = matchFlagOverrides[matchId]?.[side==="A"?"flagA":"flagB"];
+  const code = override || getFlagCode(name);
+  const adminExtra = isAdmin && matchId
+    ? `<button class="flag-picker-btn" onclick="openFlagPicker(event,'${matchId}','${side}')">🏳️ غيّر العلم</button>`
+    : '';
+  if(code){
+    return `<div class="flag-picker-wrap">
+      <img class="team-flag-emoji" src="${getFlagUrl(code)}" alt="${name}" loading="lazy"
+           onerror="this.style.display='none';this.nextSibling.style.display='flex'">
+      <div class="team-flag-placeholder" style="display:none">🏳️</div>
+      ${adminExtra}
+    </div>`;
+  }
+  return `<div class="flag-picker-wrap">
+    <div class="team-flag-placeholder">🏳️</div>
+    ${adminExtra}
+  </div>`;
+}
+
+/* ============================================================
+   FIREBASE CONFIG
    ============================================================ */
 const FIREBASE_CONFIG = {
-  apiKey: "AIzaSyCa7ZRPUzx4oEz4kLjvVZsS3BoFxrQgUfk",
-  authDomain: "wc-2026-9de97.firebaseapp.com",
-  projectId: "wc-2026-9de97",
-  storageBucket: "wc-2026-9de97.firebasestorage.app",
-  messagingSenderId: "853444520815",
-  appId: "1:853444520815:web:809391eab27920c010969a"
+  apiKey:"AIzaSyCa7ZRPUzx4oEz4kLjvVZsS3BoFxrQgUfk",
+  authDomain:"wc-2026-9de97.firebaseapp.com",
+  projectId:"wc-2026-9de97",
+  storageBucket:"wc-2026-9de97.firebasestorage.app",
+  messagingSenderId:"853444520815",
+  appId:"1:853444520815:web:809391eab27920c010969a"
 };
+const ADMIN_PIN="2026";
 
-/* PIN الأدمن اللي يسمح بتعديل أسماء الفرق وتسجيل النتيجة الحقيقية.
-   غيّره لأي حاجة تحبها قبل ما تنشر اللعبة. */
-const ADMIN_PIN = "2026";
-
-/* ============================================================
-   2) بيانات المباريات الأساسية (دور الـ32 لحد النهائي)
-   لسه مش كل الفرق متأكدة 100% لحد الآن، فحطيت "TBD" في الأماكن
-   اللي لسه مش معروفة، وتقدر تعدلها من واجهة اللعبة (admin mode)
-   ============================================================ */
-const SEED_MATCHES = [
-  // ---- دور الـ32 (16 مباراة) ----
-  {id:"r32_1", round:"دور الـ32", order:1, teamA:"جنوب أفريقيا", teamB:"كندا", info:"28 يونيو"},
-  {id:"r32_2", round:"دور الـ32", order:2, teamA:"البرازيل", teamB:"اليابان", info:"29 يونيو"},
-  {id:"r32_3", round:"دور الـ32", order:3, teamA:"ألمانيا", teamB:"باراغواي", info:"29 يونيو"},
-  {id:"r32_4", round:"دور الـ32", order:4, teamA:"المغرب", teamB:"هولندا", info:"30 يونيو"},
-  {id:"r32_5", round:"دور الـ32", order:5, teamA:"ساحل العاج", teamB:"النرويج", info:"30 يونيو"},
-  {id:"r32_6", round:"دور الـ32", order:6, teamA:"فرنسا", teamB:"السويد", info:"30 يونيو"},
-  {id:"r32_7", round:"دور الـ32", order:7, teamA:"TBD", teamB:"TBD", info:"تحدد لاحقاً"},
-  {id:"r32_8", round:"دور الـ32", order:8, teamA:"TBD", teamB:"TBD", info:"تحدد لاحقاً"},
-  {id:"r32_9", round:"دور الـ32", order:9, teamA:"TBD", teamB:"TBD", info:"تحدد لاحقاً"},
-  {id:"r32_10", round:"دور الـ32", order:10, teamA:"TBD", teamB:"TBD", info:"تحدد لاحقاً"},
-  {id:"r32_11", round:"دور الـ32", order:11, teamA:"TBD", teamB:"TBD", info:"تحدد لاحقاً"},
-  {id:"r32_12", round:"دور الـ32", order:12, teamA:"TBD", teamB:"TBD", info:"تحدد لاحقاً"},
-  {id:"r32_13", round:"دور الـ32", order:13, teamA:"TBD", teamB:"TBD", info:"تحدد لاحقاً"},
-  {id:"r32_14", round:"دور الـ32", order:14, teamA:"TBD", teamB:"TBD", info:"تحدد لاحقاً"},
-  {id:"r32_15", round:"دور الـ32", order:15, teamA:"TBD", teamB:"TBD", info:"تحدد لاحقاً"},
-  {id:"r32_16", round:"دور الـ32", order:16, teamA:"TBD", teamB:"TBD", info:"تحدد لاحقاً"},
-
-  // ---- دور الـ16 (8 مباريات) ----
-  {id:"r16_1", round:"دور الـ16", order:1, teamA:"فائز م1", teamB:"فائز م2", info:""},
-  {id:"r16_2", round:"دور الـ16", order:2, teamA:"فائز م3", teamB:"فائز م4", info:""},
-  {id:"r16_3", round:"دور الـ16", order:3, teamA:"فائز م5", teamB:"فائز م6", info:""},
-  {id:"r16_4", round:"دور الـ16", order:4, teamA:"فائز م7", teamB:"فائز م8", info:""},
-  {id:"r16_5", round:"دور الـ16", order:5, teamA:"فائز م9", teamB:"فائز م10", info:""},
-  {id:"r16_6", round:"دور الـ16", order:6, teamA:"فائز م11", teamB:"فائز م12", info:""},
-  {id:"r16_7", round:"دور الـ16", order:7, teamA:"فائز م13", teamB:"فائز م14", info:""},
-  {id:"r16_8", round:"دور الـ16", order:8, teamA:"فائز م15", teamB:"فائز م16", info:""},
-
-  // ---- ربع النهائي (4 مباريات) ----
-  {id:"qf_1", round:"ربع النهائي", order:1, teamA:"TBD", teamB:"TBD", info:""},
-  {id:"qf_2", round:"ربع النهائي", order:2, teamA:"TBD", teamB:"TBD", info:""},
-  {id:"qf_3", round:"ربع النهائي", order:3, teamA:"TBD", teamB:"TBD", info:""},
-  {id:"qf_4", round:"ربع النهائي", order:4, teamA:"TBD", teamB:"TBD", info:""},
-
-  // ---- نصف النهائي (2 مباراة) ----
-  {id:"sf_1", round:"نصف النهائي", order:1, teamA:"TBD", teamB:"TBD", info:""},
-  {id:"sf_2", round:"نصف النهائي", order:2, teamA:"TBD", teamB:"TBD", info:""},
-
-  // ---- مركز ثالث ----
-  {id:"third", round:"مركز ثالث", order:1, teamA:"TBD", teamB:"TBD", info:""},
-
-  // ---- النهائي ----
-  {id:"final", round:"النهائي", order:1, teamA:"TBD", teamB:"TBD", info:"19 يوليو"},
+const SEED_MATCHES=[
+  {id:"r32_1",round:"دور الـ32",order:1,teamA:"جنوب أفريقيا",teamB:"كندا",info:"28 يونيو"},
+  {id:"r32_2",round:"دور الـ32",order:2,teamA:"البرازيل",teamB:"اليابان",info:"29 يونيو"},
+  {id:"r32_3",round:"دور الـ32",order:3,teamA:"ألمانيا",teamB:"باراغواي",info:"29 يونيو"},
+  {id:"r32_4",round:"دور الـ32",order:4,teamA:"المغرب",teamB:"هولندا",info:"30 يونيو"},
+  {id:"r32_5",round:"دور الـ32",order:5,teamA:"ساحل العاج",teamB:"النرويج",info:"30 يونيو"},
+  {id:"r32_6",round:"دور الـ32",order:6,teamA:"فرنسا",teamB:"السويد",info:"30 يونيو"},
+  {id:"r32_7",round:"دور الـ32",order:7,teamA:"TBD",teamB:"TBD",info:"تحدد لاحقاً"},
+  {id:"r32_8",round:"دور الـ32",order:8,teamA:"TBD",teamB:"TBD",info:"تحدد لاحقاً"},
+  {id:"r32_9",round:"دور الـ32",order:9,teamA:"TBD",teamB:"TBD",info:"تحدد لاحقاً"},
+  {id:"r32_10",round:"دور الـ32",order:10,teamA:"TBD",teamB:"TBD",info:"تحدد لاحقاً"},
+  {id:"r32_11",round:"دور الـ32",order:11,teamA:"TBD",teamB:"TBD",info:"تحدد لاحقاً"},
+  {id:"r32_12",round:"دور الـ32",order:12,teamA:"TBD",teamB:"TBD",info:"تحدد لاحقاً"},
+  {id:"r32_13",round:"دور الـ32",order:13,teamA:"TBD",teamB:"TBD",info:"تحدد لاحقاً"},
+  {id:"r32_14",round:"دور الـ32",order:14,teamA:"TBD",teamB:"TBD",info:"تحدد لاحقاً"},
+  {id:"r32_15",round:"دور الـ32",order:15,teamA:"TBD",teamB:"TBD",info:"تحدد لاحقاً"},
+  {id:"r32_16",round:"دور الـ32",order:16,teamA:"TBD",teamB:"TBD",info:"تحدد لاحقاً"},
+  {id:"r16_1",round:"دور الـ16",order:1,teamA:"فائز م1",teamB:"فائز م2",info:""},
+  {id:"r16_2",round:"دور الـ16",order:2,teamA:"فائز م3",teamB:"فائز م4",info:""},
+  {id:"r16_3",round:"دور الـ16",order:3,teamA:"فائز م5",teamB:"فائز م6",info:""},
+  {id:"r16_4",round:"دور الـ16",order:4,teamA:"فائز م7",teamB:"فائز م8",info:""},
+  {id:"r16_5",round:"دور الـ16",order:5,teamA:"فائز م9",teamB:"فائز م10",info:""},
+  {id:"r16_6",round:"دور الـ16",order:6,teamA:"فائز م11",teamB:"فائز م12",info:""},
+  {id:"r16_7",round:"دور الـ16",order:7,teamA:"فائز م13",teamB:"فائز م14",info:""},
+  {id:"r16_8",round:"دور الـ16",order:8,teamA:"فائز م15",teamB:"فائز م16",info:""},
+  {id:"qf_1",round:"ربع النهائي",order:1,teamA:"TBD",teamB:"TBD",info:""},
+  {id:"qf_2",round:"ربع النهائي",order:2,teamA:"TBD",teamB:"TBD",info:""},
+  {id:"qf_3",round:"ربع النهائي",order:3,teamA:"TBD",teamB:"TBD",info:""},
+  {id:"qf_4",round:"ربع النهائي",order:4,teamA:"TBD",teamB:"TBD",info:""},
+  {id:"sf_1",round:"نصف النهائي",order:1,teamA:"TBD",teamB:"TBD",info:""},
+  {id:"sf_2",round:"نصف النهائي",order:2,teamA:"TBD",teamB:"TBD",info:""},
+  {id:"third",round:"مركز ثالث",order:1,teamA:"TBD",teamB:"TBD",info:""},
+  {id:"final",round:"النهائي",order:1,teamA:"TBD",teamB:"TBD",info:"19 يوليو"},
 ];
+const ROUND_ORDER=["دور الـ32","دور الـ16","ربع النهائي","نصف النهائي","مركز ثالث","النهائي","الترتيب"];
 
-const ROUND_ORDER = ["دور الـ32","دور الـ16","ربع النهائي","نصف النهائي","مركز ثالث","النهائي","الترتيب"];
+let db=null,firebaseReady=false;
+try{firebase.initializeApp(FIREBASE_CONFIG);db=firebase.firestore();firebaseReady=true;}
+catch(e){console.error("Firebase init failed",e);}
 
-/* ============================================================
-   3) تهيئة Firebase
-   ============================================================ */
-let db = null;
-let firebaseReady = false;
-try{
-  firebase.initializeApp(FIREBASE_CONFIG);
-  db = firebase.firestore();
-  firebaseReady = true;
-}catch(e){
-  console.error("Firebase init failed", e);
-}
+let currentUser=null,userId=null,userName="",isAdmin=false;
+let matches={},myPredictions={},allPredictions=[],allUsers={};
+let activeTab="دور الـ32",authMode="login",doubleUsed={},pendingConfirm=null,globalLocked=false;
 
-/* ============================================================
-   4) حالة محلية
-   ============================================================ */
-let currentUser = null;
-let userId = null;
-let userName = "";
-let isAdmin = false;
-let matches = {};
-let myPredictions = {};
-let allPredictions = [];
-let allUsers = {};
-let activeTab = "دور الـ32";
-let authMode = "login";
-// doubleUsed: { roundName -> matchId لو اتستخدم فيه، أو null }
-let doubleUsed = {};
-// التوقع اللي في انتظار التأكيد
-let pendingConfirm = null;
-// هل الأدمن قفل كل التوقعات؟
-let globalLocked = false;
+const tabsNav=document.getElementById("tabsNav"),mainArea=document.getElementById("mainArea");
+const connStatus=document.getElementById("connStatus"),authBox=document.getElementById("authBox");
+const userBox=document.getElementById("userBox"),welcomeUser=document.getElementById("welcomeUser");
+const tabLogin=document.getElementById("tabLogin"),tabSignup=document.getElementById("tabSignup");
+const signupNameInput=document.getElementById("signupNameInput");
+const authEmailInput=document.getElementById("authEmailInput");
+const authPasswordInput=document.getElementById("authPasswordInput");
+const authSubmitBtn=document.getElementById("authSubmitBtn"),authError=document.getElementById("authError");
+const logoutBtn=document.getElementById("logoutBtn"),adminBtn=document.getElementById("adminBtn");
 
-const tabsNav = document.getElementById("tabsNav");
-const mainArea = document.getElementById("mainArea");
-const connStatus = document.getElementById("connStatus");
-const authBox = document.getElementById("authBox");
-const userBox = document.getElementById("userBox");
-const welcomeUser = document.getElementById("welcomeUser");
-const tabLogin = document.getElementById("tabLogin");
-const tabSignup = document.getElementById("tabSignup");
-const signupNameInput = document.getElementById("signupNameInput");
-const authEmailInput = document.getElementById("authEmailInput");
-const authPasswordInput = document.getElementById("authPasswordInput");
-const authSubmitBtn = document.getElementById("authSubmitBtn");
-const authError = document.getElementById("authError");
-const logoutBtn = document.getElementById("logoutBtn");
-const adminBtn = document.getElementById("adminBtn");
-
-function setConn(text, live){
-  connStatus.textContent = text;
-  connStatus.classList.toggle("live", !!live);
-}
-
-if(!firebaseReady){
-  setConn("Firebase غير متصل — راجع README", false);
-}
-
-/* ============================================================
-   4.1) تسجيل الدخول / حساب جديد (Firestore accounts)
-   ============================================================ */
-const auth = null; // مش بنستخدم Firebase Auth
+function setConn(text,live){connStatus.textContent=text;connStatus.classList.toggle("live",!!live);}
+if(!firebaseReady)setConn("Firebase غير متصل",false);
 
 function setAuthMode(mode){
-  authMode = mode;
-  tabLogin.classList.toggle("active", mode==="login");
-  tabSignup.classList.toggle("active", mode==="signup");
-  signupNameInput.style.display = mode==="signup" ? "block" : "none";
-  authSubmitBtn.textContent = mode==="signup" ? "إنشاء الحساب" : "دخول";
-  authError.textContent = "";
+  authMode=mode;
+  tabLogin.classList.toggle("active",mode==="login");tabSignup.classList.toggle("active",mode==="signup");
+  signupNameInput.style.display=mode==="signup"?"block":"none";
+  authSubmitBtn.textContent=mode==="signup"?"إنشاء الحساب":"دخول";authError.textContent="";
 }
-tabLogin.onclick = ()=> setAuthMode("login");
-tabSignup.onclick = ()=> setAuthMode("signup");
+tabLogin.onclick=()=>setAuthMode("login");tabSignup.onclick=()=>setAuthMode("signup");
 
-authSubmitBtn.onclick = async ()=>{
-  if(!db){ alert("Firebase غير متصل."); return; }
-  const username = authEmailInput.value.trim().toLowerCase();
-  const password = authPasswordInput.value.trim();
-  authError.textContent = "";
-
-  if(!username || !password){
-    authError.textContent = "اكتب اليوزر نيم والباسورد.";
-    return;
-  }
-  if(!/^\d+$/.test(password)){
-    authError.textContent = "الباسورد لازم يكون أرقام بس.";
-    return;
-  }
-
-  authSubmitBtn.disabled = true;
-
+authSubmitBtn.onclick=async()=>{
+  if(!db){alert("Firebase غير متصل.");return;}
+  const username=authEmailInput.value.trim().toLowerCase(),password=authPasswordInput.value.trim();
+  authError.textContent="";
+  if(!username||!password){authError.textContent="اكتب اليوزر نيم والباسورد.";return;}
+  if(!/^\d+$/.test(password)){authError.textContent="الباسورد لازم يكون أرقام بس.";return;}
+  authSubmitBtn.disabled=true;authSubmitBtn.textContent="جاري…";
   try{
-    if(authMode === "signup"){
-      const displayName = signupNameInput.value.trim();
-      if(!displayName){
-        authError.textContent = "اكتب اسمك الأول.";
-        authSubmitBtn.disabled = false;
-        return;
-      }
-      // تأكد إن اليوزر نيم مش موجود
-      const existing = await db.collection("accounts").doc(username).get();
-      if(existing.exists){
-        authError.textContent = "اليوزر نيم ده موجود قبل كده، جرّب تاني.";
-        authSubmitBtn.disabled = false;
-        return;
-      }
-      // إنشاء الحساب
-      await db.collection("accounts").doc(username).set({
-        username, password, displayName, createdAt: Date.now()
-      });
-      await db.collection("users").doc(username).set({
-        name: displayName, username, createdAt: Date.now()
-      });
-      onLoggedIn(username, displayName);
-    } else {
-      // تسجيل دخول
-      const doc = await db.collection("accounts").doc(username).get();
-      if(!doc.exists){
-        authError.textContent = "اليوزر نيم ده مش موجود، جرّب تعمل حساب جديد.";
-        authSubmitBtn.disabled = false;
-        return;
-      }
-      const data = doc.data();
-      if(data.password !== password){
-        authError.textContent = "الباسورد غلط.";
-        authSubmitBtn.disabled = false;
-        return;
-      }
-      onLoggedIn(username, data.displayName);
+    if(authMode==="signup"){
+      const displayName=signupNameInput.value.trim();
+      if(!displayName){authError.textContent="اكتب اسمك الأول.";authSubmitBtn.disabled=false;authSubmitBtn.textContent="إنشاء الحساب";return;}
+      const existing=await db.collection("accounts").doc(username).get();
+      if(existing.exists){authError.textContent="اليوزر نيم ده موجود قبل كده.";authSubmitBtn.disabled=false;authSubmitBtn.textContent="إنشاء الحساب";return;}
+      await db.collection("accounts").doc(username).set({username,password,displayName,createdAt:Date.now()});
+      await db.collection("users").doc(username).set({name:displayName,username,createdAt:Date.now()});
+      onLoggedIn(username,displayName);
+    }else{
+      const doc=await db.collection("accounts").doc(username).get();
+      if(!doc.exists){authError.textContent="اليوزر نيم ده مش موجود.";authSubmitBtn.disabled=false;authSubmitBtn.textContent="دخول";return;}
+      const data=doc.data();
+      if(data.password!==password){authError.textContent="الباسورد غلط.";authSubmitBtn.disabled=false;authSubmitBtn.textContent="دخول";return;}
+      onLoggedIn(username,data.displayName);
     }
-  } catch(err){
-    console.error(err);
-    authError.textContent = "حصل خطأ، حاول تاني.";
-  }
-  authSubmitBtn.disabled = false;
+  }catch(err){console.error(err);authError.textContent="حصل خطأ، حاول تاني.";}
+  authSubmitBtn.disabled=false;authSubmitBtn.textContent=authMode==="signup"?"إنشاء الحساب":"دخول";
 };
 
-logoutBtn.onclick = ()=>{
-  onLoggedOut();
+logoutBtn.onclick=()=>onLoggedOut();
+adminBtn.onclick=()=>{
+  if(!userId){alert("لازم تسجل دخول الأول.");return;}
+  const input=prompt("دخل الباسورد ):");
+  if(input===null)return;
+  if(input.trim()===`${userId}/2026`){isAdmin=true;alert("تم تفعيل وضع الأدمن ✅");renderMain();}
+  else alert("كلمة الأدمن غلط.");
 };
 
-adminBtn.onclick = ()=>{
-  if(!userId){ alert("لازم تسجل دخول الأول."); return; }
-  const adminPassword = `${userId}/2026`;
-  const input = prompt("دخل الباسورد ):");
-  if(input === null) return;
-  if(input.trim() === adminPassword){
-    isAdmin = true;
-    alert("تم تفعيل وضع الأدمن ✅");
-    renderMain();
-  } else {
-    alert("كلمة الأدمن غلط.");
-  }
-};
-
-function onLoggedIn(username, displayName){
-  userId = username;
-  userName = displayName || username;
-  // حفظ الجلسة في localStorage
-  localStorage.setItem("wc2026_uid", username);
-  localStorage.setItem("wc2026_name", displayName || username);
-  authBox.style.display = "none";
-  userBox.style.display = "flex";
-  welcomeUser.innerHTML = `أهلاً، <b>${userName}</b>`;
-  loadMyPredictions();
-  renderMain();
+function onLoggedIn(username,displayName){
+  userId=username;userName=displayName||username;
+  localStorage.setItem("wc2026_uid",username);localStorage.setItem("wc2026_name",displayName||username);
+  authBox.style.display="none";userBox.style.display="flex";
+  welcomeUser.innerHTML=`أهلاً، <b>${userName}</b>`;
+  loadMyPredictions();renderMain();
 }
-
 function onLoggedOut(){
-  currentUser = null;
-  userId = null;
-  userName = "";
-  isAdmin = false;
-  myPredictions = {};
-  // مسح الجلسة من localStorage
-  localStorage.removeItem("wc2026_uid");
-  localStorage.removeItem("wc2026_name");
-  authBox.style.display = "block";
-  userBox.style.display = "none";
-  renderMain();
+  currentUser=null;userId=null;userName="";isAdmin=false;myPredictions={};
+  localStorage.removeItem("wc2026_uid");localStorage.removeItem("wc2026_name");
+  authBox.style.display="block";userBox.style.display="none";renderMain();
 }
 
-/* ============================================================
-   5) بناء التابات
-   ============================================================ */
 function renderTabs(){
-  tabsNav.innerHTML = "";
+  tabsNav.innerHTML="";
   ROUND_ORDER.forEach(r=>{
-    const el = document.createElement("div");
-    el.className = "tab" + (activeTab===r ? " active":"");
-    el.textContent = r;
-    el.onclick = ()=>{ activeTab = r; renderTabs(); renderMain(); };
-    tabsNav.appendChild(el);
+    const el=document.createElement("div");
+    el.className="tab"+(activeTab===r?" active":"");el.textContent=r;
+    el.onclick=()=>{activeTab=r;renderTabs();renderMain();};tabsNav.appendChild(el);
   });
 }
 
-/* ============================================================
-   6) منطق النقاط
-   ============================================================ */
-function calcPoints(predA, predB, actA, actB){
-  if(actA===null || actA===undefined || actB===null || actB===undefined) return null;
-  if(predA===null || predA===undefined || predB===null || predB===undefined) return null;
-  if(predA===actA && predB===actB) return 3;
-  const predSign = Math.sign(predA-predB);
-  const actSign = Math.sign(actA-actB);
-  if(predSign===actSign) return 1;
+function calcPoints(pA,pB,aA,aB){
+  if(aA==null||aB==null||pA==null||pB==null)return null;
+  if(pA===aA&&pB===aB)return 3;
+  if(Math.sign(pA-pB)===Math.sign(aA-aB))return 1;
   return 0;
 }
 
-/* ============================================================
-   7) عرض المباريات (تاب عادي)
-   ============================================================ */
 function renderMatchesForRound(round){
-  const list = Object.values(matches)
-    .filter(m=>m.round===round)
-    .sort((a,b)=>a.order-b.order);
-
-  if(list.length===0){
-    mainArea.innerHTML = `<div class="empty">لسه مفيش مباريات في هذا الدور.</div>`;
-    return;
-  }
-
-  const wrap = document.createElement("div");
-
+  const list=Object.values(matches).filter(m=>m.round===round).sort((a,b)=>a.order-b.order);
+  if(!list.length){mainArea.innerHTML=`<div class="empty"><span class="empty-icon">⏳</span>لسه مفيش مباريات في هذا الدور.</div>`;return;}
+  const wrap=document.createElement("div");
   if(isAdmin){
-    const bar = document.createElement("div");
-    bar.className = "admin-bar";
-    bar.innerHTML = `
+    const bar=document.createElement("div");bar.className="admin-bar";
+    bar.innerHTML=`
       <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;width:100%;">
-        <span style="font-family:'Oswald',sans-serif;color:var(--gold);font-size:13px;letter-spacing:.5px;flex:1;">🔐 وضع الأدمن</span>
+        <span style="font-family:'Oswald',sans-serif;color:var(--gold);font-size:13px;flex:1;">🔐 وضع الأدمن</span>
         <button class="btn ghost small" id="exitAdminBtn">خروج</button>
       </div>
       <div style="display:flex;flex-wrap:wrap;gap:8px;width:100%;margin-top:8px;padding-top:8px;border-top:1px solid var(--line);">
-        <button class="btn small ${globalLocked?'':'gold'}" id="toggleLockAllBtn">
-          ${globalLocked ? '🔓 فتح التوقعات للكل' : '🔒 قفل التوقعات للكل'}
+        <button class="btn small ${globalLocked?'danger-btn':'gold'}" id="toggleLockAllBtn">
+          ${globalLocked?'🔓 فتح التوقعات':'🔒 قفل التوقعات للكل'}
         </button>
         <button class="btn ghost small" id="adminManageDoubleBtn">⚡ إدارة Double</button>
-      </div>
-    `;
+      </div>`;
     wrap.appendChild(bar);
   }
-
-  // بانر القفل العام (للكل مش بس الأدمن)
-  if(globalLocked && !isAdmin){
-    const banner = document.createElement("div");
-    banner.className = "global-lock-banner";
-    banner.innerHTML = "🔒 التوقعات متقفلة دلوقتي — مش ممكن تعمل أو تعدل توقع";
+  if(globalLocked&&!isAdmin){
+    const banner=document.createElement("div");banner.className="global-lock-banner";
+    banner.innerHTML=`<span>🔒</span> التوقعات متقفلة دلوقتي — مش ممكن تعمل أو تعدل توقع`;
     wrap.appendChild(banner);
   }
-
-  list.forEach(m=>{
-    wrap.appendChild(buildMatchCard(m));
+  list.forEach((m,idx)=>{
+    const card=buildMatchCard(m);
+    card.classList.add("card-enter");card.style.animationDelay=`${idx*.07}s`;
+    wrap.appendChild(card);
   });
-
-  mainArea.innerHTML = "";
-  mainArea.appendChild(wrap);
-
+  mainArea.innerHTML="";mainArea.appendChild(wrap);
   if(isAdmin){
-    document.getElementById("exitAdminBtn").onclick = ()=>{ isAdmin=false; renderMain(); };
-
-    document.getElementById("toggleLockAllBtn").onclick = ()=>{
-      globalLocked = !globalLocked;
-      if(db){
-        db.collection("settings").doc("global").set({predictionsLocked: globalLocked}, {merge:true});
-      }
+    document.getElementById("exitAdminBtn").onclick=()=>{isAdmin=false;renderMain();};
+    document.getElementById("toggleLockAllBtn").onclick=()=>{
+      globalLocked=!globalLocked;
+      if(db)db.collection("settings").doc("global").set({predictionsLocked:globalLocked},{merge:true});
       renderMain();
     };
-
-    document.getElementById("adminManageDoubleBtn").onclick = ()=> openManageDoublePanel();
+    document.getElementById("adminManageDoubleBtn").onclick=()=>openManageDoublePanel();
   }
 }
 
 function buildMatchCard(m){
-  const card = document.createElement("div");
-  card.className = "match-card";
-
-  const pred = myPredictions[m.id] || {scoreA:"", scoreB:"", locked:false, isDouble:false};
-  const isLocked = !!pred.locked;
-  const isDouble = !!pred.isDouble;
-  const hasResult = m.resultA!==undefined && m.resultA!==null && m.resultB!==undefined && m.resultB!==null;
-
-  // نقاط مع مضاعفة لو double
-  let pts = hasResult ? calcPoints(
-    pred.scoreA===""? null: Number(pred.scoreA),
-    pred.scoreB===""? null: Number(pred.scoreB),
-    m.resultA, m.resultB
-  ) : null;
-  const displayPts = (pts !== null && isDouble) ? pts * 2 : pts;
-
-  const metaRight = hasResult
-    ? (displayPts===null ? `<span class="pts">لسه ماتوقعتش</span>`
-       : displayPts===6 ? `<span class="pts p3">+6 ⚡🎯 Double مضبوط!</span>`
-       : displayPts===3 ? (isDouble ? `<span class="pts p3">+3 ⚡✅ Double فائز</span>` : `<span class="pts p3">+3 🎯 نتيجة مضبوطة</span>`)
-       : displayPts===2 ? `<span class="pts p1">+2 ⚡✅ Double فائز</span>`
-       : displayPts===1 ? `<span class="pts p1">+1 ✅ فائز صحيح</span>`
-       : `<span class="pts p0">0 ❌</span>`)
-    : `<span>مفتوحة للتوقع</span>`;
-
-  // double button للراوند ده
-  const round = m.round;
-  const doubleUsedInRound = doubleUsed[round];
-  const doubleLockedHere = doubleUsedInRound === m.id + "__locked";
-  const doubleLockedElsewhere = doubleUsedInRound && !doubleLockedHere;
-  const effectiveLocked = isLocked || globalLocked;
-
-  // بناء سكشن الـ Double
-  let doubleSectionHtml = "";
+  const card=document.createElement("div");card.className="match-card";
+  const pred=myPredictions[m.id]||{scoreA:"",scoreB:"",locked:false,isDouble:false};
+  const isLocked=!!pred.locked,isDouble=!!pred.isDouble;
+  const hasResult=m.resultA!=null&&m.resultB!=null;
+  let pts=hasResult?calcPoints(pred.scoreA===""?null:Number(pred.scoreA),pred.scoreB===""?null:Number(pred.scoreB),m.resultA,m.resultB):null;
+  const displayPts=(pts!==null&&isDouble)?pts*2:pts;
+  const matchLocked=!!m.matchLocked;
+  const metaRight=hasResult
+    ?(displayPts===null?`<span class="pts">لسه ماتوقعتش</span>`
+      :displayPts===6?`<span class="pts p3">+6 ⚡🎯 Double مضبوط!</span>`
+      :displayPts===3?(isDouble?`<span class="pts p3">+3 ⚡✅ Double فائز</span>`:`<span class="pts p3">+3 🎯 نتيجة مضبوطة</span>`)
+      :displayPts===2?`<span class="pts p1">+2 ⚡✅ Double فائز</span>`
+      :displayPts===1?`<span class="pts p1">+1 ✅ فائز صحيح</span>`
+      :`<span class="pts p0">0 ❌</span>`)
+    :`<span style="color:var(--muted);font-size:11px;">${matchLocked?'🔒 مقفولة':'مفتوحة للتوقع'}</span>`;
+  const round=m.round;
+  const doubleUsedInRound=doubleUsed[round];
+  const doubleLockedHere=doubleUsedInRound===m.id+"__locked";
+  const doubleLockedElsewhere=doubleUsedInRound&&!doubleLockedHere;
+  const effectiveLocked=isLocked||globalLocked||matchLocked;
+  let doubleSectionHtml="";
   if(!hasResult){
-    if(isDouble || doubleLockedHere){
-      // مقفول بـ double على المباراة دي
-      doubleSectionHtml = `
-        <div class="double-section">
-          <div class="double-section-label">⚡ DOUBLE<small>النقاط مضاعفة على المباراة دي</small></div>
+    if(isDouble||doubleLockedHere){
+      doubleSectionHtml=`
+        <div class="double-section is-active">
+          <div class="double-section-icon">⚡</div>
+          <div class="double-section-label">DOUBLE مفعّل<small>النقاط مضاعفة على المباراة دي</small></div>
           <span class="double-locked-badge">🔒 مقفول</span>
         </div>`;
-    } else if(!effectiveLocked){
-      // مفتوح — ممكن يختار double
-      doubleSectionHtml = `
+    }else if(!effectiveLocked){
+      doubleSectionHtml=`
         <div class="double-section">
-          <div class="double-section-label">⚡ DOUBLE<small>${doubleLockedElsewhere ? 'اتستخدم في مباراة تانية في الراوند ده' : 'ضاعف نقاطك لو توقعك صح'}</small></div>
-          <button class="btn double-btn ${doubleLockedElsewhere?'used':''}" ${doubleLockedElsewhere?'disabled':''} data-double="${m.id}">
-            ${doubleLockedElsewhere ? '⚡ مستخدم' : '⚡ اختار'}
+          <div class="double-section-icon" style="opacity:${doubleLockedElsewhere?.3:.85}">⚡</div>
+          <div class="double-section-label">DOUBLE<small>${doubleLockedElsewhere?'اتستخدم في مباراة تانية في الراوند ده':'ضاعف نقاطك لو توقعك صح — مرة واحدة بس في الراوند'}</small></div>
+          <button class="btn double-btn" ${doubleLockedElsewhere?'disabled':''} data-double="${m.id}">
+            <span>⚡</span>${doubleLockedElsewhere?'مستخدم':'اختار'}
           </button>
         </div>`;
     }
   }
-
-  if(isDouble || doubleLockedHere) card.classList.add("double-locked");
-
-  const lockBadge = isLocked ? `<span class="lock-badge">🔒 مقفول</span>` : "";
-
-  card.innerHTML = `
+  if(isDouble||doubleLockedHere)card.classList.add("double-locked");
+  if(matchLocked)card.classList.add("match-locked");
+  const lockBadge=(isLocked||matchLocked)?`<span class="lock-badge">${matchLocked?'🔒 المباراة مقفولة':'🔒 مقفول'}</span>`:``;
+  card.innerHTML=`
     <div class="match-meta">
-      <span>${m.round} · مباراة ${m.order}${m.info? " · "+m.info: ""}</span>
+      <div class="match-info-left">
+        <span>${m.round} · م${m.order}</span>
+        ${m.info?`<span class="match-date-badge">${m.info}</span>`:""}
+      </div>
       ${metaRight}
     </div>
     <div class="teams-row">
       <div class="team">
+        ${flagHtml(m.teamA, m.id, "A")}
         <span class="team-name" ${isAdmin?'contenteditable="true"':''} data-side="A" data-id="${m.id}">${m.teamA}</span>
-        <input type="number" min="0" max="30" class="score-box" data-id="${m.id}" data-side="A" value="${pred.scoreA}" placeholder="-" ${effectiveLocked?'disabled':''} />
+        <input type="number" min="0" max="30" class="score-box" data-id="${m.id}" data-side="A" value="${pred.scoreA}" placeholder="-" ${effectiveLocked?'disabled':''}/>
       </div>
-      <div class="vs-block">
-        <span class="vs-label scoreboard-font">VS</span>
-      </div>
+      <div class="vs-block"><span class="vs-label scoreboard-font">VS</span></div>
       <div class="team">
+        ${flagHtml(m.teamB, m.id, "B")}
         <span class="team-name" ${isAdmin?'contenteditable="true"':''} data-side="B" data-id="${m.id}">${m.teamB}</span>
-        <input type="number" min="0" max="30" class="score-box" data-id="${m.id}" data-side="B" value="${pred.scoreB}" placeholder="-" ${effectiveLocked?'disabled':''} />
+        <input type="number" min="0" max="30" class="score-box" data-id="${m.id}" data-side="B" value="${pred.scoreB}" placeholder="-" ${effectiveLocked?'disabled':''}/>
       </div>
     </div>
     ${doubleSectionHtml}
-    ${isAdmin ? `
+    ${isAdmin?`
       <div class="actual-row">
         <span class="lbl scoreboard-font">النتيجة الحقيقية</span>
-        <input type="number" min="0" max="30" class="admin-score" data-result-id="${m.id}" data-side="A" value="${hasResult? m.resultA: ''}" />
+        <input type="number" min="0" max="30" class="admin-score" data-result-id="${m.id}" data-side="A" value="${hasResult?m.resultA:''}"/>
         <span class="lbl">-</span>
-        <input type="number" min="0" max="30" class="admin-score" data-result-id="${m.id}" data-side="B" value="${hasResult? m.resultB: ''}" />
+        <input type="number" min="0" max="30" class="admin-score" data-result-id="${m.id}" data-side="B" value="${hasResult?m.resultB:''}"/>
         <button class="btn gold small" data-save-result="${m.id}">حفظ النتيجة</button>
+        <button class="btn small ${matchLocked?'danger-btn':''}" data-toggle-match-lock="${m.id}" style="margin-right:4px">
+          ${matchLocked?'🔓 فتح المباراة':'🔒 قفل المباراة'}
+        </button>
       </div>
-    ` : hasResult ? `
+    `:hasResult?`
       <div class="actual-row">
         <span class="lbl scoreboard-font">النتيجة الحقيقية</span>
-        <span class="score">${m.resultA} - ${m.resultB}</span>
+        <span class="score">${m.resultA} — ${m.resultB}</span>
       </div>
-    ` : ``}
+    `:''}
     <div class="card-footer">
-      ${!effectiveLocked && !hasResult ? `<button class="btn small" data-save-pred="${m.id}">حفظ وقفل توقعي 🔒</button>` : lockBadge}
+      ${!effectiveLocked&&!hasResult?`<button class="btn small" data-save-pred="${m.id}">حفظ وقفل توقعي 🔒</button>`:lockBadge}
       <span class="saved-tag" id="saved_${m.id}"></span>
-    </div>
-  `;
-
-  // مستمعين
-  card.querySelectorAll('[data-save-pred]').forEach(btn=>{
-    btn.onclick = ()=> savePrediction(m.id);
-  });
-
-  // زرار Double — بيفتح confirm modal
-  const dblBtn = card.querySelector('[data-double]');
-  if(dblBtn){
-    dblBtn.onclick = ()=> confirmDouble(m.id, round, m);
-  }
-
+    </div>`;
+  card.querySelectorAll('[data-save-pred]').forEach(btn=>{btn.onclick=()=>savePrediction(m.id);});
+  const dblBtn=card.querySelector('[data-double]');
+  if(dblBtn)dblBtn.onclick=()=>confirmDouble(m.id,round,m);
   if(isAdmin){
-    card.querySelectorAll('[data-save-result]').forEach(btn=>{
-      btn.onclick = ()=> saveResult(m.id);
-    });
+    card.querySelectorAll('[data-save-result]').forEach(btn=>{btn.onclick=()=>saveResult(m.id);});
+    card.querySelectorAll('[data-toggle-match-lock]').forEach(btn=>{btn.onclick=()=>toggleMatchLock(m.id,matchLocked);});
     card.querySelectorAll('.team-name[contenteditable="true"]').forEach(el=>{
-      el.onblur = ()=> saveTeamName(m.id, el.dataset.side, el.textContent.trim());
+      el.onblur=()=>saveTeamName(m.id,el.dataset.side,el.textContent.trim());
     });
   }
-
   return card;
 }
 
-/* ---- Modal helpers ---- */
-const confirmModal = document.getElementById("confirmModal");
-const confirmModalBody = document.getElementById("confirmModalBody");
-const confirmCancel = document.getElementById("confirmCancel");
-const confirmOk = document.getElementById("confirmOk");
+const confirmModal=document.getElementById("confirmModal");
+const confirmModalBody=document.getElementById("confirmModalBody");
+const confirmCancel=document.getElementById("confirmCancel");
+const confirmOk=document.getElementById("confirmOk");
 
-confirmCancel.onclick = ()=>{
-  confirmModal.classList.remove("open");
-  pendingConfirm = null;
-  confirmOk.textContent = "تأكيد وقفل";
-  confirmOk.style.display = "";
-  confirmCancel.textContent = "إلغاء";
-  delete confirmModal.dataset.mode;
+confirmCancel.onclick=()=>{
+  confirmModal.classList.remove("open");pendingConfirm=null;
+  confirmOk.textContent="تأكيد وقفل";confirmOk.style.display="";
+  confirmCancel.textContent="إلغاء";delete confirmModal.dataset.mode;
 };
-confirmOk.onclick = ()=>{
-  const mode = confirmModal.dataset.mode;
+confirmOk.onclick=()=>{
+  const mode=confirmModal.dataset.mode;
   confirmModal.classList.remove("open");
-  confirmOk.textContent = "تأكيد وقفل";
-  confirmOk.style.display = "";
-  confirmCancel.textContent = "إلغاء";
-  if(mode === "double"){
-    const matchId = confirmModal.dataset.matchId;
-    const round = confirmModal.dataset.round;
-    // يتقفل نهائي — مش pending تاني
-    doubleUsed[round] = matchId + "__locked";
-    delete confirmModal.dataset.mode;
-    renderMain();
-  } else {
-    if(pendingConfirm) doSavePrediction(pendingConfirm);
-    pendingConfirm = null;
-    delete confirmModal.dataset.mode;
+  confirmOk.textContent="تأكيد وقفل";confirmOk.style.display="";confirmCancel.textContent="إلغاء";
+  if(mode==="double"){
+    doubleUsed[confirmModal.dataset.round]=confirmModal.dataset.matchId+"__locked";
+    delete confirmModal.dataset.mode;renderMain();
+  }else{
+    if(pendingConfirm)doSavePrediction(pendingConfirm);
+    pendingConfirm=null;delete confirmModal.dataset.mode;
   }
 };
 
 function savePrediction(matchId){
-  if(!ensureUser()) return;
-  const m = matches[matchId];
-  if(!m) return;
-
-  // لو الأدمن قفل كل التوقعات
-  if(globalLocked){
-    alert("التوقعات متقفلة دلوقتي من الأدمن. 🔒");
-    return;
-  }
-
-  // لو التوقع مقفول منعه
-  const pred = myPredictions[matchId];
-  if(pred && pred.locked){
-    alert("التوقع ده مقفول ومش ممكن تغيره. 🔒");
-    return;
-  }
-
-  const scoreAEl = document.querySelector(`.score-box[data-id="${matchId}"][data-side="A"]`);
-  const scoreBEl = document.querySelector(`.score-box[data-id="${matchId}"][data-side="B"]`);
-  const scoreA = scoreAEl.value;
-  const scoreB = scoreBEl.value;
-  if(scoreA==="" || scoreB===""){
-    alert("اكتب نتيجة للفريقين الاتنين قبل الحفظ.");
-    return;
-  }
-
-  // هل ده double؟
-  const round = m.round;
-  const isDoubleOnThis = doubleUsed[round] === matchId + "__locked";
-  
-  // اعرض modal التأكيد
-  const dblNote = isDoubleOnThis
-    ? `<span class="double-note">⚡ Double مفعّل — النقاط هتتضاعف لو صح!</span>` : "";
-  document.querySelector(".modal-icon").textContent = "🔒";
-  document.querySelector(".modal-title").textContent = "تأكيد التوقع";
-  confirmOk.textContent = "تأكيد وقفل";
-  confirmModalBody.innerHTML = `
-    <span>${m.teamA} <b>vs</b> ${m.teamB}</span>
+  if(!ensureUser())return;
+  const m=matches[matchId];if(!m)return;
+  if(globalLocked){alert("التوقعات متقفلة دلوقتي. 🔒");return;}
+  const pred=myPredictions[matchId];
+  if(pred&&pred.locked){alert("التوقع ده مقفول. 🔒");return;}
+  const sAEl=document.querySelector(`.score-box[data-id="${matchId}"][data-side="A"]`);
+  const sBEl=document.querySelector(`.score-box[data-id="${matchId}"][data-side="B"]`);
+  const scoreA=sAEl.value,scoreB=sBEl.value;
+  if(scoreA===""||scoreB===""){alert("اكتب نتيجة للفريقين الاتنين قبل الحفظ.");return;}
+  const isDoubleOnThis=doubleUsed[m.round]===matchId+"__locked";
+  const dblNote=isDoubleOnThis?`<span class="double-note">⚡ Double مفعّل — النقاط هتتضاعف لو صح!</span>`:"";
+  const _cA=matchFlagOverrides[m.id]?.flagA||getFlagCode(m.teamA),_cB=matchFlagOverrides[m.id]?.flagB||getFlagCode(m.teamB);
+  const fA=_cA?`<img src="${getFlagUrl(_cA)}" style="width:24px;height:16px;object-fit:cover;border-radius:2px;vertical-align:middle;">`:'🏳️';
+  const fB=_cB?`<img src="${getFlagUrl(_cB)}" style="width:24px;height:16px;object-fit:cover;border-radius:2px;vertical-align:middle;">`:'🏳️';
+  document.querySelector(".modal-icon").textContent="🔒";
+  document.querySelector(".modal-title").textContent="تأكيد التوقع";
+  confirmOk.textContent="تأكيد وقفل";
+  confirmModalBody.innerHTML=`
+    <span style="font-size:18px">${fA} ${m.teamA} <b>vs</b> ${m.teamB} ${fB}</span>
     <span class="highlight">${scoreA} — ${scoreB}</span>
-    لو حفظت، التوقع ده هيتقفل ومش هتقدر تغيره.
-    ${dblNote}
-  `;
-  confirmModal.dataset.mode = "prediction";
-  pendingConfirm = {matchId, scoreA, scoreB, isDouble: isDoubleOnThis, round};
+    لو حفظت، التوقع ده هيتقفل ومش هتقدر تغيره.${dblNote}`;
+  confirmModal.dataset.mode="prediction";
+  pendingConfirm={matchId,scoreA,scoreB,isDouble:isDoubleOnThis,round:m.round};
   confirmModal.classList.add("open");
 }
 
-function doSavePrediction({matchId, scoreA, scoreB, isDouble, round}){
-  const docId = `${matchId}__${userId}`;
-
-  // doubleUsed[round] اتقفل بالفعل من confirmDouble modal
-
-  const data = {
-    matchId, uid: userId, userName,
-    scoreA: Number(scoreA), scoreB: Number(scoreB),
-    locked: true,
-    isDouble: !!isDouble,
-    updatedAt: Date.now()
-  };
-  myPredictions[matchId] = {scoreA, scoreB, locked: true, isDouble: !!isDouble};
-
-  // doubleUsed يتحدد من Firestore — مش محتاجين localStorage
-
+function doSavePrediction({matchId,scoreA,scoreB,isDouble,round}){
+  const docId=`${matchId}__${userId}`;
+  const data={matchId,uid:userId,userName,scoreA:Number(scoreA),scoreB:Number(scoreB),locked:true,isDouble:!!isDouble,updatedAt:Date.now()};
+  myPredictions[matchId]={scoreA,scoreB,locked:true,isDouble:!!isDouble};
   if(db){
-    db.collection("predictions").doc(docId).set(data)
-      .then(()=>{
-        flashSaved(matchId);
-        renderMain(); // لتحديث القفل
-      })
-      .catch(err=>{ console.error(err); alert("حصل خطأ في الحفظ."); });
-  } else {
-    flashSaved(matchId);
-    renderMain();
-  }
+    db.collection("predictions").doc(docId).set(data).then(()=>{flashSaved(matchId);renderMain();})
+      .catch(err=>{console.error(err);alert("حصل خطأ في الحفظ.");});
+  }else{flashSaved(matchId);renderMain();}
 }
 
 function flashSaved(matchId){
-  const tag = document.getElementById(`saved_${matchId}`);
-  if(tag){
-    tag.textContent = "تم الحفظ ✅";
-    setTimeout(()=>{ if(tag) tag.textContent=""; }, 2500);
-  }
+  const tag=document.getElementById(`saved_${matchId}`);
+  if(tag){tag.textContent="تم الحفظ ✅";setTimeout(()=>{if(tag)tag.textContent="";},2500);}
 }
 
-function confirmDouble(matchId, round, m){
-  if(!ensureUser()) return;
-  // دايماً يفتح modal التأكيد — مفيش إلغاء تلقائي
-  confirmModal.dataset.mode = "double";
-  confirmModal.dataset.matchId = matchId;
-  confirmModal.dataset.round = round;
-  document.querySelector(".modal-icon").textContent = "⚡";
-  document.querySelector(".modal-title").textContent = "تأكيد الـ Double";
-  confirmModalBody.innerHTML = `
-    <span>${m.teamA} <b>vs</b> ${m.teamB}</span>
-    <span class="highlight" style="font-size:15px;margin:8px 0;">ده هيضاعف نقاطك على المباراة دي</span>
-    لو أكدت، الـ Double هيتقفل ومش هتقدر تغييره ولا تستخدمه في مباراة تانية في نفس الراوند.
-    <span class="double-note">⚡ مرة واحدة بس في كل راوند — اختار بعقلك!</span>
-  `;
-  confirmOk.textContent = "تأكيد وقفل الـ Double ⚡";
+function confirmDouble(matchId,round,m){
+  if(!ensureUser())return;
+  const _cA=matchFlagOverrides[m.id]?.flagA||getFlagCode(m.teamA),_cB=matchFlagOverrides[m.id]?.flagB||getFlagCode(m.teamB);
+  const fA=_cA?`<img src="${getFlagUrl(_cA)}" style="width:24px;height:16px;object-fit:cover;border-radius:2px;vertical-align:middle;">`:'🏳️';
+  const fB=_cB?`<img src="${getFlagUrl(_cB)}" style="width:24px;height:16px;object-fit:cover;border-radius:2px;vertical-align:middle;">`:'🏳️';
+  confirmModal.dataset.mode="double";confirmModal.dataset.matchId=matchId;confirmModal.dataset.round=round;
+  document.querySelector(".modal-icon").textContent="⚡";
+  document.querySelector(".modal-title").textContent="تأكيد الـ Double";
+  confirmModalBody.innerHTML=`
+    <span style="font-size:18px">${fA} ${m.teamA} <b>vs</b> ${m.teamB} ${fB}</span>
+    <span class="highlight" style="font-size:16px;color:var(--gold)">⚡ نقاطك على المباراة دي هتتضاعف</span>
+    لو أكدت، الـ Double هيتقفل ومش هتقدر تغييره أو تستخدمه في مباراة تانية في نفس الراوند.
+    <span class="double-note">⚡ مرة واحدة بس في كل راوند — اختار بعقلك!</span>`;
+  confirmOk.textContent="تأكيد وقفل الـ Double ⚡";
   confirmModal.classList.add("open");
 }
 
-// toggleDouble removed — double يتقفل فقط عبر confirmDouble modal
-
 function saveResult(matchId){
-  const aEl = document.querySelector(`.admin-score[data-result-id="${matchId}"][data-side="A"]`);
-  const bEl = document.querySelector(`.admin-score[data-result-id="${matchId}"][data-side="B"]`);
-  if(aEl.value==="" || bEl.value===""){
-    alert("اكتب النتيجة كاملة (الفريقين) قبل الحفظ.");
-    return;
-  }
-  const resultA = Number(aEl.value), resultB = Number(bEl.value);
+  const aEl=document.querySelector(`.admin-score[data-result-id="${matchId}"][data-side="A"]`);
+  const bEl=document.querySelector(`.admin-score[data-result-id="${matchId}"][data-side="B"]`);
+  if(aEl.value===""||bEl.value===""){alert("اكتب النتيجة كاملة قبل الحفظ.");return;}
+  const rA=Number(aEl.value),rB=Number(bEl.value);
+  if(db){db.collection("matches").doc(matchId).set({resultA:rA,resultB:rB},{merge:true}).catch(err=>console.error(err));}
+  else{matches[matchId].resultA=rA;matches[matchId].resultB=rB;renderMain();}
+}
+
+function toggleMatchLock(matchId, currentlyLocked){
+  const newVal=!currentlyLocked;
   if(db){
-    db.collection("matches").doc(matchId).set({resultA, resultB}, {merge:true})
-      .catch(err=>console.error(err));
-  } else {
-    matches[matchId].resultA = resultA;
-    matches[matchId].resultB = resultB;
-    renderMain();
+    db.collection("matches").doc(matchId).set({matchLocked:newVal},{merge:true})
+      .catch(err=>{console.error(err);alert("حصل خطأ.");});
+  }else{
+    matches[matchId].matchLocked=newVal;renderMain();
   }
 }
 
-function saveTeamName(matchId, side, value){
-  if(!value) return;
-  const field = side==="A" ? "teamA" : "teamB";
-  if(db){
-    db.collection("matches").doc(matchId).set({[field]: value}, {merge:true})
-      .catch(err=>console.error(err));
-  } else {
-    matches[matchId][field] = value;
-  }
+function saveTeamName(matchId,side,value){
+  if(!value)return;
+  const field=side==="A"?"teamA":"teamB";
+  if(db){db.collection("matches").doc(matchId).set({[field]:value},{merge:true}).catch(err=>console.error(err));}
+  else{matches[matchId][field]=value;}
 }
 
-/* ============================================================
-   8) الترتيب (Leaderboard)
-   ============================================================ */
 function renderLeaderboard(){
-  const totals = {}; // uid -> {name, pts, exact, winner, played}
-
-  // اتأكد إن كل المسجلين (حتى اللي لسه ماتوقعوش) يظهروا في الترتيب بـ 0 نقطة
-  Object.entries(allUsers).forEach(([uid, u])=>{
-    totals[uid] = {name:u.name || u.email || "لاعب", pts:0, exact:0, winner:0, played:0};
-  });
-
+  const totals={};
+  Object.entries(allUsers).forEach(([uid,u])=>{totals[uid]={name:u.name||"لاعب",pts:0,exact:0,winner:0,played:0};});
   allPredictions.forEach(p=>{
-    const m = matches[p.matchId];
-    if(!m) return;
-    const uid = p.uid || p.userName; // توافق مع توقعات قديمة كانت بالاسم بس
-    if(!totals[uid]) totals[uid] = {name: p.userName || "لاعب", pts:0, exact:0, winner:0, played:0};
-    const hasResult = m.resultA!==undefined && m.resultA!==null && m.resultB!==undefined && m.resultB!==null;
-    if(!hasResult) return;
-    let pts = calcPoints(p.scoreA, p.scoreB, m.resultA, m.resultB);
-    if(pts===null) return;
-    if(p.isDouble) pts = pts * 2;
-    totals[uid].pts += pts;
-    totals[uid].played += 1;
-    if(pts===3) totals[uid].exact += 1;
-    if(pts===1) totals[uid].winner += 1;
+    const m=matches[p.matchId];if(!m)return;
+    const uid=p.uid||p.userName;
+    if(!totals[uid])totals[uid]={name:p.userName||"لاعب",pts:0,exact:0,winner:0,played:0};
+    if(m.resultA==null||m.resultB==null)return;
+    let pts=calcPoints(p.scoreA,p.scoreB,m.resultA,m.resultB);if(pts===null)return;
+    if(p.isDouble)pts*=2;
+    totals[uid].pts+=pts;totals[uid].played+=1;
+    if(pts>=3)totals[uid].exact+=1;
+    else if(pts>=1)totals[uid].winner+=1;
   });
-
-  const rows = Object.entries(totals)
-    .map(([uid, t])=>({uid, ...t}))
-    .sort((a,b)=> b.pts-a.pts);
-
-  const wrap = document.createElement("div");
-
-  if(rows.length===0){
-    wrap.innerHTML = `<div class="empty">مفيش لاعبين مسجلين لسه. أول ما حد يعمل حساب جديد، هيظهر هنا تلقائي.</div>`;
-    mainArea.innerHTML = "";
-    mainArea.appendChild(wrap);
-    return;
+  const rows=Object.entries(totals).map(([uid,t])=>({uid,...t})).sort((a,b)=>b.pts-a.pts);
+  const wrap=document.createElement("div");
+  if(!rows.length){
+    wrap.innerHTML=`<div class="empty"><span class="empty-icon">🏆</span>مفيش لاعبين مسجلين لسه.</div>`;
+    mainArea.innerHTML="";mainArea.appendChild(wrap);return;
   }
-
-  const medal = (i)=> i===0?"🥇": i===1?"🥈": i===2?"🥉": (i+1);
-  const rankClass = (i)=> i===0?"rank gold-1": i===1?"rank silver-2": i===2?"rank bronze-3":"rank";
-
-  wrap.innerHTML = `
+  const medal=i=>i===0?"🥇":i===1?"🥈":i===2?"🥉":(i+1);
+  const rc=i=>i===0?"rank gold-1":i===1?"rank silver-2":i===2?"rank bronze-3":"rank";
+  wrap.innerHTML=`
     <div class="leaderboard">
       <table>
-        <thead>
-          <tr>
-            <th>#</th><th>اللاعب</th><th>نتايج مضبوطة</th><th>فايز صحيح</th><th>مباريات محسوبة</th><th>النقاط</th>
-          </tr>
-        </thead>
+        <thead><tr><th>#</th><th>اللاعب</th><th>🎯 مضبوطة</th><th>✅ فائز</th><th>مباريات</th><th>النقاط</th></tr></thead>
         <tbody>
           ${rows.map((r,i)=>`
-            <tr class="${r.uid===userId ? 'you-row':''}">
-              <td class="${rankClass(i)}">${medal(i)}</td>
-              <td>${r.name}${r.uid===userId? " (انت)":""}</td>
-              <td>${r.exact}</td>
-              <td>${r.winner}</td>
-              <td>${r.played}</td>
+            <tr class="${r.uid===userId?'you-row':''}">
+              <td class="${rc(i)}">${medal(i)}</td>
+              <td><div class="player-name-cell">${r.name}${r.uid===userId?` <span style="color:var(--mint);font-size:11px;">(انت)</span>`:''}</div></td>
+              <td>${r.exact}</td><td>${r.winner}</td>
+              <td style="color:var(--muted)">${r.played}</td>
               <td class="total-pts">${r.pts}</td>
-            </tr>
-          `).join("")}
+            </tr>`).join("")}
         </tbody>
       </table>
-    </div>
-  `;
-  mainArea.innerHTML = "";
-  mainArea.appendChild(wrap);
+    </div>`;
+  mainArea.innerHTML="";mainArea.appendChild(wrap);
 }
 
-/* ============================================================
-   9) Router رئيسي
-   ============================================================ */
-function renderMain(){
-  if(activeTab==="الترتيب"){
-    renderLeaderboard();
-  } else {
-    renderMatchesForRound(activeTab);
-  }
+function openManageDoublePanel(){
+  const ud={};
+  allPredictions.forEach(p=>{
+    if(p.isDouble){const m=matches[p.matchId];if(!m)return;
+      const uid=p.uid||p.userName,name=p.userName||uid;
+      if(!ud[uid])ud[uid]={name,doubles:[]};
+      ud[uid].doubles.push({matchId:p.matchId,round:m.round,teamA:m.teamA,teamB:m.teamB});}
+  });
+  const entries=Object.entries(ud);
+  document.querySelector(".modal-icon").textContent="⚡";
+  document.querySelector(".modal-title").textContent="إدارة الـ Double";
+  confirmOk.style.display="none";confirmCancel.textContent="إغلاق";
+  confirmModalBody.innerHTML=!entries.length
+    ?`<div style="color:var(--muted);padding:10px 0;">مفيش حد استخدم الـ Double لحد دلوقتي.</div>`
+    :`<div style="text-align:right;width:100%;">
+        ${entries.map(([uid,u])=>`
+          <div style="background:var(--bg-deep);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px;">
+            <div style="font-family:'Oswald',sans-serif;color:var(--cream);font-size:14px;margin-bottom:8px;">👤 ${u.name}</div>
+            ${u.doubles.map(d=>{
+              const _cA=matchFlagOverrides[d.matchId]?.flagA||getFlagCode(d.teamA);
+              const _cB=matchFlagOverrides[d.matchId]?.flagB||getFlagCode(d.teamB);
+              const fA=_cA?`<img src="${getFlagUrl(_cA)}" style="width:22px;height:14px;object-fit:cover;border-radius:2px;vertical-align:middle;">`:'🏳️';
+              const fB=_cB?`<img src="${getFlagUrl(_cB)}" style="width:22px;height:14px;object-fit:cover;border-radius:2px;vertical-align:middle;">`:'🏳️';
+              return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap;">
+                <span style="font-size:12px;color:var(--gold);flex:1;">⚡ ${fA}${d.teamA} vs ${d.teamB}${fB} <span style="color:var(--muted)">(${d.round})</span></span>
+                <button class="btn small danger-btn" onclick="adminRemoveDouble('${uid}','${d.matchId}')">إلغاء Double</button>
+              </div>`;}).join("")}
+          </div>`).join("")}
+      </div>`;
+  confirmModal.dataset.mode="manage";confirmModal.classList.add("open");
 }
 
-/* ============================================================
-   10) تسجيل الدخول بالاسم + وضع الأدمن
-   ============================================================ */
-function ensureUser(){
-  if(!userId){
-    alert("لازم تسجّل دخول الأول من فوق.");
-    return false;
-  }
-  return true;
+function adminRemoveDouble(uid,matchId){
+  if(!db){alert("Firebase غير متصل.");return;}
+  db.collection("predictions").doc(`${matchId}__${uid}`).set({isDouble:false},{merge:true})
+    .then(()=>{
+      if(uid===userId){const m=matches[matchId];if(m)delete doubleUsed[m.round];}
+      const idx=allPredictions.findIndex(p=>p.uid===uid&&p.matchId===matchId);
+      if(idx!==-1)allPredictions[idx].isDouble=false;
+      openManageDoublePanel();
+    }).catch(err=>{console.error(err);alert("حصل خطأ.");});
 }
 
-/* ============================================================
-   11) Firestore listeners
-   ============================================================ */
 function seedMatchesIfEmpty(){
-  if(!db) return;
+  if(!db)return;
   db.collection("matches").limit(1).get().then(snap=>{
     if(snap.empty){
-      const batch = db.batch();
-      SEED_MATCHES.forEach(m=>{
-        const ref = db.collection("matches").doc(m.id);
-        batch.set(ref, m);
-      });
-      batch.commit().catch(err=>console.error("seed error", err));
+      const batch=db.batch();
+      SEED_MATCHES.forEach(m=>{const ref=db.collection("matches").doc(m.id);batch.set(ref,m);});
+      batch.commit().catch(err=>console.error("seed error",err));
     }
   });
 }
 
 function listenMatches(){
-  if(!db){
-    SEED_MATCHES.forEach(m=> matches[m.id]=m);
-    setConn("وضع محلي (بدون مشاركة) — ضيف بيانات Firebase", false);
-    renderMain();
-    return;
-  }
+  if(!db){SEED_MATCHES.forEach(m=>matches[m.id]=m);setConn("وضع محلي",false);renderMain();return;}
   db.collection("matches").onSnapshot(snap=>{
-    snap.forEach(doc=>{
-      matches[doc.id] = doc.data();
-    });
-    setConn("متصل ومتزامن مع صحابك", true);
-    renderMain();
-  }, err=>{
-    console.error(err);
-    setConn("خطأ في الاتصال بـ Firebase", false);
-  });
+    snap.forEach(doc=>{matches[doc.id]=doc.data();});setConn("متصل ومتزامن مع صحابك",true);renderMain();
+  },err=>{console.error(err);setConn("خطأ في الاتصال بـ Firebase",false);});
 }
 
 function listenAllPredictions(){
-  if(!db) return;
+  if(!db)return;
   db.collection("predictions").onSnapshot(snap=>{
-    allPredictions = snap.docs.map(d=>d.data());
-    if(activeTab==="الترتيب") renderMain();
+    allPredictions=snap.docs.map(d=>d.data());if(activeTab==="الترتيب")renderMain();
   });
 }
 
 function loadMyPredictions(){
-  if(!db || !userId) return;
+  if(!db||!userId)return;
   db.collection("predictions").where("uid","==",userId).get().then(snap=>{
-    myPredictions = {};
-    doubleUsed = {}; // إعادة بناء من Firestore مش من localStorage
+    myPredictions={};doubleUsed={};
     snap.forEach(doc=>{
-      const d = doc.data();
-      myPredictions[d.matchId] = {
-        scoreA: String(d.scoreA),
-        scoreB: String(d.scoreB),
-        locked: !!d.locked,
-        isDouble: !!d.isDouble
-      };
-      // لو فيه double مقفول، سجّله في doubleUsed
-      if(d.isDouble){
-        const m = matches[d.matchId];
-        if(m) doubleUsed[m.round] = d.matchId + "__locked";
-      }
+      const d=doc.data();
+      myPredictions[d.matchId]={scoreA:String(d.scoreA),scoreB:String(d.scoreB),locked:!!d.locked,isDouble:!!d.isDouble};
+      if(d.isDouble){const m=matches[d.matchId];if(m)doubleUsed[m.round]=d.matchId+"__locked";}
     });
     renderMain();
   });
 }
 
 function listenUsers(){
-  if(!db) return;
+  if(!db)return;
   db.collection("users").onSnapshot(snap=>{
-    allUsers = {};
-    snap.forEach(doc=>{ allUsers[doc.id] = doc.data(); });
-    if(activeTab==="الترتيب") renderMain();
+    allUsers={};snap.forEach(doc=>{allUsers[doc.id]=doc.data();});
+    if(activeTab==="الترتيب")renderMain();
   });
 }
 
-/* ============================================================
-   إدارة الـ Double (أدمن)
-   ============================================================ */
-function openManageDoublePanel(){
-  // اجمع كل اليوزرز اللي عندهم double في أي راوند
-  const usersWithDouble = {};
-  allPredictions.forEach(p=>{
-    if(p.isDouble){
-      const m = matches[p.matchId];
-      if(!m) return;
-      const uid = p.uid || p.userName;
-      const name = p.userName || uid;
-      if(!usersWithDouble[uid]) usersWithDouble[uid] = {name, doubles:[]};
-      usersWithDouble[uid].doubles.push({matchId: p.matchId, round: m.round, teamA: m.teamA, teamB: m.teamB});
-    }
-  });
-
-  const entries = Object.entries(usersWithDouble);
-
-  document.querySelector(".modal-icon").textContent = "⚡";
-  document.querySelector(".modal-title").textContent = "إدارة الـ Double";
-  confirmOk.style.display = "none";
-  confirmCancel.textContent = "إغلاق";
-
-  if(entries.length === 0){
-    confirmModalBody.innerHTML = `<div style="color:var(--muted);padding:10px 0;">مفيش حد استخدم الـ Double لحد دلوقتي.</div>`;
-  } else {
-    confirmModalBody.innerHTML = `
-      <div style="text-align:right;width:100%;">
-        ${entries.map(([uid, u])=>`
-          <div style="background:var(--bg-deep);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px;">
-            <div style="font-family:'Oswald',sans-serif;color:var(--cream);font-size:14px;margin-bottom:8px;">👤 ${u.name}</div>
-            ${u.doubles.map(d=>`
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap;">
-                <span style="font-size:12px;color:var(--gold);flex:1;">⚡ ${d.teamA} vs ${d.teamB} <span style="color:var(--muted)">(${d.round})</span></span>
-                <button class="btn small" style="background:var(--danger);border-color:var(--danger);color:white;font-size:11px;padding:5px 10px;" 
-                  onclick="adminRemoveDouble('${uid}','${d.matchId}')">إلغاء Double</button>
-              </div>
-            `).join("")}
-          </div>
-        `).join("")}
-      </div>
-    `;
-  }
-  confirmModal.dataset.mode = "manage";
-  confirmModal.classList.add("open");
-}
-
-function adminRemoveDouble(uid, matchId){
-  if(!db){ alert("Firebase غير متصل."); return; }
-  const docId = `${matchId}__${uid}`;
-  db.collection("predictions").doc(docId).set({isDouble: false}, {merge:true})
-    .then(()=>{
-      // امسح من doubleUsed لو ده نفس اليوزر الحالي
-      if(uid === userId){
-        const m = matches[matchId];
-        if(m) delete doubleUsed[m.round];
-      }
-      // حدّث allPredictions محلياً
-      const idx = allPredictions.findIndex(p=> p.uid===uid && p.matchId===matchId);
-      if(idx !== -1) allPredictions[idx].isDouble = false;
-      // افتح البانيل تاني بعد التحديث
-      openManageDoublePanel();
-    })
-    .catch(err=>{ console.error(err); alert("حصل خطأ."); });
-}
-
-/* ============================================================
-   Firestore Settings Listener (globalLocked)
-   ============================================================ */
 function listenSettings(onReady){
-  if(!db){
-    onReady && onReady();
-    return;
-  }
-  let firstRead = true;
+  if(!db){onReady&&onReady();return;}
+  let firstRead=true;
   db.collection("settings").doc("global").onSnapshot(doc=>{
-    const prev = globalLocked;
-    globalLocked = doc.exists ? !!doc.data().predictionsLocked : false;
-    if(firstRead){
-      firstRead = false;
-      onReady && onReady(); // ابدأ باقي الـ listeners بعد ما القيمة اتقرأت
-    } else if(prev !== globalLocked){
-      renderMain(); // تحديث مباشر لو اتغيرت بعدين
-    }
-  }, err=>{
-    console.error("settings listener error", err);
-    onReady && onReady(); // حتى لو فيه error، ابدأ عادي
-  });
+    const prev=globalLocked;
+    globalLocked=doc.exists?!!doc.data().predictionsLocked:false;
+    if(firstRead){firstRead=false;onReady&&onReady();}
+    else if(prev!==globalLocked){renderMain();}
+  },err=>{console.error("settings listener error",err);onReady&&onReady();});
+}
+
+function ensureUser(){if(!userId){alert("لازم تسجّل دخول الأول من فوق.");return false;}return true;}
+
+function renderMain(){
+  if(activeTab==="الترتيب")renderLeaderboard();
+  else renderMatchesForRound(activeTab);
 }
 
 /* ============================================================
-   تشغيل
+   FLAG PICKER — الأدمن يختار علم لأي فريق من قائمة
    ============================================================ */
-setAuthMode("login");
-renderTabs();
-seedMatchesIfEmpty();
-// اقرأ الـ settings الأول، وبعدين ابدأ باقي الـ listeners
-listenSettings(()=>{
-  listenMatches();
-  listenAllPredictions();
-  listenUsers();
-});
+// Full sorted list of all countries with codes for the picker
+const ALL_COUNTRIES = [
+  ["أفغانستان","af"],["ألبانيا","al"],["الجزائر","dz"],["أندورا","ad"],["أنغولا","ao"],
+  ["الأرجنتين","ar"],["أرمينيا","am"],["أستراليا","au"],["النمسا","at"],["أذربيجان","az"],
+  ["البحرين","bh"],["بنغلاديش","bd"],["بيلاروسيا","by"],["بلجيكا","be"],["بوليفيا","bo"],
+  ["البوسنة","ba"],["البرازيل","br"],["بلغاريا","bg"],["بوركينا فاسو","bf"],["الكاميرون","cm"],
+  ["كندا","ca"],["تشيلي","cl"],["الصين","cn"],["كولومبيا","co"],["كوستاريكا","cr"],
+  ["كرواتيا","hr"],["كوبا","cu"],["قبرص","cy"],["التشيك","cz"],["الدنمارك","dk"],
+  ["مصر","eg"],["إل سالفادور","sv"],["إستونيا","ee"],["إثيوبيا","et"],["فنلندا","fi"],
+  ["فرنسا","fr"],["جورجيا","ge"],["ألمانيا","de"],["غانا","gh"],["اليونان","gr"],
+  ["جواتيمالا","gt"],["هندوراس","hn"],["المجر","hu"],["إيسلندا","is"],["الهند","in"],
+  ["إندونيسيا","id"],["إيران","ir"],["العراق","iq"],["أيرلندا","ie"],["إسرائيل","il"],
+  ["إيطاليا","it"],["ساحل العاج","ci"],["جامايكا","jm"],["اليابان","jp"],["الأردن","jo"],
+  ["كازاخستان","kz"],["كينيا","ke"],["كوريا الجنوبية","kr"],["كوسوفو","xk"],["الكويت","kw"],
+  ["لاتفيا","lv"],["لبنان","lb"],["ليبيريا","lr"],["ليبيا","ly"],["ليختنشتاين","li"],
+  ["ليتوانيا","lt"],["لوكسمبورغ","lu"],["مقدونيا","mk"],["مدغشقر","mg"],["مالطا","mt"],
+  ["المكسيك","mx"],["مولدوفا","md"],["الجبل الأسود","me"],["المغرب","ma"],["موزمبيق","mz"],
+  ["ناميبيا","na"],["هولندا","nl"],["نيوزيلندا","nz"],["نيكاراغوا","ni"],["نيجيريا","ng"],
+  ["النرويج","no"],["عُمان","om"],["باكستان","pk"],["بنما","pa"],["باراغواي","py"],
+  ["البيرو","pe"],["الفلبين","ph"],["بولندا","pl"],["البرتغال","pt"],["قطر","qa"],
+  ["رومانيا","ro"],["روسيا","ru"],["المملكة العربية السعودية","sa"],["السنغال","sn"],["صربيا","rs"],
+  ["سيراليون","sl"],["سلوفاكيا","sk"],["سلوفينيا","si"],["جنوب أفريقيا","za"],["إسبانيا","es"],
+  ["السودان","sd"],["السويد","se"],["سويسرا","ch"],["سوريا","sy"],["طاجيكستان","tj"],
+  ["تنزانيا","tz"],["تايلاند","th"],["تونس","tn"],["تركيا","tr"],["أوغندا","ug"],
+  ["أوكرانيا","ua"],["الإمارات","ae"],["إنجلترا","gb-eng"],["إسكتلندا","gb-sct"],["ويلز","gb-wls"],
+  ["الولايات المتحدة","us"],["أوروغواي","uy"],["أوزبكستان","uz"],["فنزويلا","ve"],["فيتنام","vn"],
+  ["اليمن","ye"],["زامبيا","zm"],["زيمبابوي","zw"],
+];
 
-// استعادة الجلسة تلقائياً بعد الرفريش
-(function restoreSession(){
-  const savedUid = localStorage.getItem("wc2026_uid");
-  const savedName = localStorage.getItem("wc2026_name");
-  if(savedUid && savedName && db){
-    // تحقق إن الأكونت لسه موجود
-    db.collection("accounts").doc(savedUid).get().then(doc=>{
-      if(doc.exists){
-        onLoggedIn(savedUid, savedName);
-      } else {
-        localStorage.removeItem("wc2026_uid");
-        localStorage.removeItem("wc2026_name");
-      }
-    }).catch(()=>{});
+let _activePicker=null;
+
+function openFlagPicker(e, matchId, side){
+  e.stopPropagation();
+  // close any open picker first
+  if(_activePicker)_activePicker.classList.remove("open");
+
+  const btn=e.currentTarget;
+  let dd=btn.parentElement.querySelector('.flag-dropdown');
+  if(!dd){
+    dd=document.createElement('div');
+    dd.className='flag-dropdown';
+    dd.innerHTML=`<input class="flag-search" placeholder="ابحث عن دولة…" oninput="filterFlagOptions(this)">
+      <div class="flag-option no-flag" data-code="" onclick="saveFlagChoice('${matchId}','${side}','',this)">❌ بلا علم</div>
+      ${ALL_COUNTRIES.map(([name,code])=>`
+        <div class="flag-option" data-code="${code}" onclick="saveFlagChoice('${matchId}','${side}','${code}',this)">
+          <img src="${getFlagUrl(code)}" loading="lazy" onerror="this.style.visibility='hidden'">
+          ${name}
+        </div>`).join('')}`;
+    btn.parentElement.appendChild(dd);
   }
-})();
+  dd.classList.toggle('open');
+  _activePicker=dd.classList.contains('open')?dd:null;
+  // close on outside click
+  if(_activePicker){
+    setTimeout(()=>document.addEventListener('click',closeFlagPicker,{once:true}),0);
+    const inp=dd.querySelector('.flag-search');if(inp)inp.focus();
+  }
+}
 
+function closeFlagPicker(){if(_activePicker){_activePicker.classList.remove('open');_activePicker=null;}}
+
+function filterFlagOptions(inp){
+  const q=inp.value.trim();
+  inp.parentElement.querySelectorAll('.flag-option:not(.no-flag)').forEach(el=>{
+    el.style.display=el.textContent.includes(q)?'':'none';
+  });
+}
+
+function saveFlagChoice(matchId, side, code, optEl){
+  if(!matchFlagOverrides[matchId])matchFlagOverrides[matchId]={};
+  const field=side==="A"?"flagA":"flagB";
+  matchFlagOverrides[matchId][field]=code||null;
+  closeFlagPicker();
+  // save to Firestore
+  if(db){
+    db.collection("matchFlags").doc(matchId).set({[field]:code||null},{merge:true})
+      .catch(err=>console.error("flag save error",err));
+  }
+  renderMain();
+}
+
+function listenMatchFlags(){
+  if(!db)return;
+  db.collection("matchFlags").onSnapshot(snap=>{
+    snap.forEach(doc=>{matchFlagOverrides[doc.id]=doc.data();});
+    renderMain();
+  },err=>console.error("matchFlags listener",err));
+}
+
+/* Boot */
+setAuthMode("login");renderTabs();seedMatchesIfEmpty();
+listenSettings(()=>{
+  listenMatches();listenAllPredictions();listenUsers();listenMatchFlags();
+  const savedUid=localStorage.getItem("wc2026_uid");
+  const savedName=localStorage.getItem("wc2026_name");
+  if(savedUid&&savedName&&db){
+    db.collection("accounts").doc(savedUid).get()
+      .then(doc=>{
+        if(doc.exists){onLoggedIn(savedUid,savedName);}
+        else{localStorage.removeItem("wc2026_uid");localStorage.removeItem("wc2026_name");}
+      }).catch(()=>{onLoggedIn(savedUid,savedName);});
+  }
+});
 </script>
 </body>
 </html>
